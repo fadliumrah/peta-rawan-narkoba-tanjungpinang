@@ -1,4 +1,5 @@
 import multer from 'multer';
+import path from 'path';
 
 // Use memory storage: files will be uploaded directly to Cloudinary without
 // being persisted on disk. This simplifies deployments and avoids local
