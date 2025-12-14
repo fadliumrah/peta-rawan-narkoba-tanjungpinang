@@ -6,7 +6,6 @@ Environment variables:
 - `WAIT_FOR_DB=1` (optional): if set, server will wait for MongoDB to be reachable before starting; if it cannot connect after retries, the process will exit. When not set, server starts immediately and will continue background retries — write API requests may return 503 until DB is ready.
 - `TRUST_PROXY` (optional): set to `1` or `true` to enable Express `trust proxy` (recommended when behind a load balancer / reverse proxy such as Railway). If unset, the server enables `trust proxy` automatically when `NODE_ENV=production`. This prevents express-rate-limit errors caused by `X-Forwarded-For` headers.
 
-
 Common issues & fixes:
 - Port already in use: check which process is using the port and terminate it.
   - Windows:

@@ -28,9 +28,9 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Trust proxy when deployed behind a load balancer / reverse proxy (Heroku, Railway, Render)
-// Default behavior: if `TRUST_PROXY` is explicitly set, respect it; otherwise
-// enable trust proxy by default in `production` so platforms like Railway
-// that set `X-Forwarded-For` won't trigger express-rate-limit validation errors.
+// If `TRUST_PROXY` is explicitly set, respect it. Otherwise enable trust
+// proxy automatically in production so platforms that set `X-Forwarded-For`
+// (Railway, Render, Heroku, etc.) won't trigger express-rate-limit errors.
 const trustProxyEnv = process.env.TRUST_PROXY;
 const trustProxy = typeof trustProxyEnv !== 'undefined'
   ? (trustProxyEnv === '1' || trustProxyEnv === 'true')
