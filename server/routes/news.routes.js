@@ -246,23 +246,22 @@ router.put('/:id', authenticateToken, (req, res) => {
       if (req.file) {
         const localPath = req.file.path;
 
-        // Upload new image to Cloudinary
+        // Upload new image to Cloudinary from memory buffer (we use memory storage)
         let uploadResult;
         try {
-          uploadResult = await cloudinary.v2.uploader.upload(localPath, {
+          // Prefer uploading from buffer to support memory storage in multer
+          uploadResult = await uploadBufferToCloudinary(req.file.buffer, {
             folder: 'peta-rawan-narkoba/news',
+            filename: req.file.originalname,
             resource_type: 'image'
           });
         } catch (e) {
-          if (fs.existsSync(localPath)) fs.unlinkSync(localPath);
+          console.error('[news] Cloudinary upload error (update):', e && e.stack ? e.stack : e);
           return res.status(500).json({ success: false, message: 'Cloudinary upload failed', error: e.message });
         }
 
         const imagePath = uploadResult.secure_url;
         const imagePublicId = uploadResult.public_id;
-
-        // Remove local file
-        if (fs.existsSync(localPath)) fs.unlinkSync(localPath);
 
         // Delete old image on Cloudinary if we have public id
         if (news.imagePublicId) {
