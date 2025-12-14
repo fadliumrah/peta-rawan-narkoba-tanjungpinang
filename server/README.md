@@ -43,4 +43,12 @@ Logs & debugging:
 Client builds during install:
 - The server `postinstall` script will attempt to build the `client` folder (if present) by running `npm ci --omit=dev` and `npm run build` inside `client`. This ensures the server can serve a production SPA when deployed. If you don't want automatic client builds, remove the `postinstall` script from `server/package.json` or set CI-specific flags.
 
+Railway (Deploy) notes:
+- To avoid npm printing the `Use --omit=dev` warning in startup logs, set the Railway Service "Install Command" and "Start Command" explicitly:
+  - Install Command: `npm ci --omit=dev`
+  - Start Command: `node server.js`  (or `npm run start:node` if you prefer an npm script)
+- Alternatively, set environment variables in Railway:
+  - `NPM_CONFIG_OMIT=dev` and/or `NPM_CONFIG_PRODUCTION=false`
+- After changing these settings, redeploy and check logs; the npm production warning should disappear.
+
 If you still have trouble connecting, paste the connection error messages from the server logs and I'll help diagnose further.
