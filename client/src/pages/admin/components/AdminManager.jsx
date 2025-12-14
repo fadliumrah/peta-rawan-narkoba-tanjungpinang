@@ -3,7 +3,7 @@ import { Users, Plus, Edit, Trash2, Save, X, Key, UserCheck, UserX, Eye, EyeOff 
 import Toast from '../../../components/Toast';
 import ConfirmModal from '../../../components/ConfirmModal';
 import { useToast } from '../../../hooks/useToast';
-import axios from 'axios';
+import api from '../../../services/api';
 
 const AdminManager = () => {
   const [admins, setAdmins] = useState([]);
@@ -39,16 +39,7 @@ const AdminManager = () => {
 
   const checkSuperAdmin = async () => {
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error('No token found');
-        setIsSuperAdmin(false);
-        return;
-      }
-      
-      const response = await axios.get('/api/auth/me', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await api.get('/auth/me');
       
       console.log('Check Super Admin Response:', response.data);
       
@@ -81,17 +72,7 @@ const AdminManager = () => {
 
   const fetchAdmins = async () => {
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error('No token found');
-        setAdmins([]);
-        setLoading(false);
-        return;
-      }
-      
-      const response = await axios.get('/api/auth/users', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await api.get('/auth/users');
       
       if (response.data.success && Array.isArray(response.data.data)) {
         // Sort admins: Super Admin first, then others
@@ -144,23 +125,17 @@ const AdminManager = () => {
     }
 
     try {
-      const token = localStorage.getItem('token');
-      
       if (editingId) {
         // Update existing admin
-        await axios.put(`/api/auth/users/${editingId}`, {
+        await api.put(`/auth/users/${editingId}`, {
           username: formData.username,
           nama: formData.nama,
           nomorKtp: formData.nomorKtp
-        }, {
-          headers: { Authorization: `Bearer ${token}` }
         });
         success('Admin berhasil diupdate!');
       } else {
         // Create new admin
-        await axios.post('/api/auth/register', formData, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await api.post('/auth/register', formData);
         success('Admin berhasil ditambahkan!');
       }
       
@@ -193,11 +168,8 @@ const AdminManager = () => {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      const token = localStorage.getItem('token');
       const adminId = deleteTarget.nomorKtp || deleteTarget._id;
-      await axios.delete(`/api/auth/users/${adminId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.delete(`/auth/users/${adminId}`);
       success('Admin berhasil dihapus!');
       fetchAdmins();
     } catch (err) {
@@ -217,12 +189,9 @@ const AdminManager = () => {
 
   const handleToggleActive = async (admin) => {
     try {
-      const token = localStorage.getItem('token');
       const adminId = admin.nomorKtp || admin._id;
-      await axios.put(`/api/auth/users/${adminId}`, {
+      await api.put(`/auth/users/${adminId}`, {
         isActive: !admin.isActive
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
       });
       success(`Admin berhasil ${!admin.isActive ? 'diaktifkan' : 'dinonaktifkan'}!`);
       fetchAdmins();
@@ -246,12 +215,9 @@ const AdminManager = () => {
     }
 
     try {
-      const token = localStorage.getItem('token');
       const adminId = selectedAdmin.nomorKtp || selectedAdmin._id;
-      await axios.put(`/api/auth/users/${adminId}/reset-password`, {
+      await api.put(`/auth/users/${adminId}/reset-password`, {
         newPassword: resetPasswordData.newPassword
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
       });
       success('Password berhasil direset!');
       setShowResetPassword(false);
