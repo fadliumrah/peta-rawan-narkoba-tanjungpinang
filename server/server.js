@@ -257,6 +257,12 @@ app.get('/api', (req, res) => {
       news: '/api/news'
     }
   });
+
+  // Compatibility: if /api/health is requested in environments where proxy
+  // or routing rules interfere, redirect to the canonical /health endpoint.
+  app.get('/api/health', (req, res) => {
+    return res.redirect('/health');
+  });
 });
 
 // Block write requests when database is not available to avoid confusing errors
