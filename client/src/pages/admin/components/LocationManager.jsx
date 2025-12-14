@@ -141,9 +141,8 @@ const LocationManager = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
-  // mapRef and container refs were previously used for advanced interactions;
-  // currently not needed so keeping the component simpler.
-
+  const [mapRef, setMapRef] = useState(null);
+  const mapContainerRef = useState(null)[0];
   const [filterKelurahan, setFilterKelurahan] = useState(''); // '' = semua, 'nama_kelurahan' = filter
   const [formData, setFormData] = useState({
     latitude: '',
@@ -350,7 +349,7 @@ const LocationManager = () => {
       description: location.description || ''
     });
     setEditingId(location._id);
-    setShowForm(true);
+      setShowForm(true);
 
       // Scroll to the top of the LocationManager page so admin can see the form header
       // Use a small timeout to allow the component to render if needed
@@ -365,7 +364,7 @@ const LocationManager = () => {
         }
       }, 100);
 
-    // form already opened above
+    setShowForm(true);
 
     // After opening the form, scroll to it and focus first field
     // Use a small timeout to allow React to render the form first

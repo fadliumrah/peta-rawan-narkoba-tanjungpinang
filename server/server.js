@@ -92,6 +92,18 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Log any API responses with error status to make debugging easier
+app.use('/api', (req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    if (res.statusCode >= 400) {
+      console.warn(`API ${req.method} ${req.originalUrl} -> ${res.statusCode} (${duration}ms)`);
+    }
+  });
+  next();
+});
+
 // Static files untuk uploads (deprecated when using Cloudinary):
 // Historically we served uploads from disk here. After migrating assets to
 // Cloudinary we will remove this static serving to avoid exposing local files.
@@ -203,6 +215,14 @@ process.on('unhandledRejection', (reason, p) => {
 process.on('uncaughtException', (err) => {
   console.error('Uncaught Exception:', err && err.stack ? err.stack : err);
   process.exit(1);
+});
+
+// Diagnostic hooks: log exit and beforeExit so we can see why process ends
+process.on('beforeExit', (code) => {
+  console.log('Process beforeExit with code', code);
+});
+process.on('exit', (code) => {
+  console.log('Process exit with code', code);
 });
 
 // Routes
