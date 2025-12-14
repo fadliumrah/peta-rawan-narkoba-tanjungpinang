@@ -1,0 +1,42 @@
+Server setup and troubleshooting
+
+Environment variables:
+- `MONGODB_URI`: MongoDB connection string (Atlas or local). Example: `mongodb://localhost:27017/peta-rawan-narkoba` or Atlas connection string.
+- `PORT`: port the server listens on (default `5000`).
+- `WAIT_FOR_DB=1` (optional): if set, server will wait for MongoDB to be reachable before starting; if it cannot connect after retries, the process will exit. When not set, server starts immediately and will continue background retries — write API requests may return 503 until DB is ready.
+
+Common issues & fixes:
+- Port already in use: check which process is using the port and terminate it.
+  - Windows:
+    ```powershell
+    netstat -ano | findstr :5000
+    taskkill /PID <pid> /F
+    ```
+  - Linux/macOS:
+    ```bash
+    lsof -i :5000
+    kill -9 <pid>
+    ```
+
+- MongoDB connection failures:
+  - Ensure `MONGODB_URI` is valid and includes correct user/password and database name.
+  - If using MongoDB Atlas, ensure your IP is whitelisted and credentials are correct.
+  - Enable `WAIT_FOR_DB=1` to have the server block until DB is available during startup (useful for deterministic deployment setups).
+
+Uploads migration and cleanup:
+- The project used to persist uploads to `server/uploads/` before uploading to Cloudinary. We now upload directly from memory to Cloudinary and no longer serve `/uploads`.
+- To safely migrate existing local files to Cloudinary, use the migration script:
+
+  ```bash
+  cd server
+  node scripts/migrate-uploads-to-cloudinary.js --dry-run    # preview
+  node scripts/migrate-uploads-to-cloudinary.js --confirm    # perform migration and backup
+  ```
+
+- After migrating and verifying, you can remove `server/uploads/` or keep a local backup in `server/uploads_backup/`.
+
+Logs & debugging:
+- Startup will attempt to connect to MongoDB with retries and exponential backoff; errors are logged with attempt count and messages.
+- Use `/api/health` to check runtime status of the API and DB connectivity.
+
+If you still have trouble connecting, paste the connection error messages from the server logs and I'll help diagnose further.
