@@ -40,4 +40,7 @@ Logs & debugging:
 - Startup will attempt to connect to MongoDB with retries and exponential backoff; errors are logged with attempt count and messages.
 - Use `/api/health` to check runtime status of the API and DB connectivity.
 
+Client builds during install:
+- The server `postinstall` script will attempt to build the `client` folder (if present) by running `npm ci --omit=dev` and `npm run build` inside `client`. This ensures the server can serve a production SPA when deployed. If you don't want automatic client builds, remove the `postinstall` script from `server/package.json` or set CI-specific flags.
+
 If you still have trouble connecting, paste the connection error messages from the server logs and I'll help diagnose further.
