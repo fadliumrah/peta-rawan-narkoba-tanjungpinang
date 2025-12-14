@@ -56,9 +56,7 @@ router.get('/', authenticateToken, async (req, res) => {
 // Update/Create banner (Admin)
 router.post('/', authenticateToken, (req, res) => {
   uploadBanner(req, res, async (err) => {
-    console.log('[banner] upload request: filePresent=', !!req.file, 'size=', req.file?.size, 'name=', req.file?.originalname);
     if (err) {
-      console.error('[banner] multer error:', err && err.message ? err.message : err);
       return res.status(400).json({ 
         success: false, 
         message: err.message 
@@ -82,7 +80,6 @@ router.post('/', authenticateToken, (req, res) => {
       try {
         uploadResult = await uploadBufferToCloudinary(req.file.buffer, { folder: 'peta-rawan-narkoba/banners', filename: req.file.originalname, resource_type: 'image' });
       } catch (e) {
-        console.error('[banner] Cloudinary upload error:', e && e.stack ? e.stack : e);
         return res.status(500).json({ success: false, message: 'Cloudinary upload failed', error: e.message });
       }
 
