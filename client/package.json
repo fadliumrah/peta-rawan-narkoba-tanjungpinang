@@ -1,6 +1,9 @@
 {
   "name": "peta-rawan-narkoba-client",
   "private": true,
+  "engines": {
+    "node": ">=16"
+  },
   "version": "1.0.0",
   "type": "module",
   "scripts": {

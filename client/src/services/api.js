@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+// Allow overriding API base URL via Vite env var `VITE_API_BASE` when deployed
+const BASE_URL = import.meta.env.VITE_API_BASE || '/api';
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },

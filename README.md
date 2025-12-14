@@ -198,6 +198,19 @@ If you prefer to set a known password for the dev super admin, set `SUPER_ADMIN_
 3. Pilih koordinat dengan 3 cara:
    - **Klik di Peta**: Aktifkan mode klik, lalu klik di peta
    - **Gunakan GPS**: Klik tombol GPS (perlu izin browser)
+
+  ## 📦 Deploy Frontend to Vercel
+
+  - Connect your GitHub repository to Vercel and create a new project for the `client` folder.
+  - Project settings:
+    - Root directory: `client`
+    - Build Command: `npm run build`
+    - Output Directory: `dist`
+  - Environment Variables (add in Vercel dashboard):
+    - `VITE_API_BASE` = `https://<your-railway-app>.up.railway.app/api` (replace with your actual API URL)
+  - Ensure CORS: if you set `ALLOWED_ORIGINS` on the server, include the Vercel URL so API accepts requests from the deployed frontend.
+
+  After deployment, check the Vercel project logs for build success and verify the frontend can call the API endpoints.
    - **Input Manual**: Ketik langsung latitude & longitude
 4. Pilih kelurahan (warna otomatis)
 5. Isi kecamatan, alamat, deskripsi
