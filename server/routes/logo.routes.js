@@ -40,7 +40,9 @@ router.get('/active', async (req, res) => {
 // Update/Create logo (Admin)
 router.post('/', authenticateToken, (req, res) => {
   uploadLogo(req, res, async (err) => {
+      console.log('[logo] upload request: filePresent=', !!req.file, 'size=', req.file?.size, 'name=', req.file?.originalname);
       if (err) {
+        console.error('[logo] multer error:', err && err.message ? err.message : err);
         return res.status(400).json({ 
           success: false, 
           message: err.message 
@@ -64,6 +66,7 @@ router.post('/', authenticateToken, (req, res) => {
         try {
           uploadResult = await uploadBufferToCloudinary(req.file.buffer, { folder: 'peta-rawan-narkoba/logos', filename: req.file.originalname, resource_type: 'image' });
         } catch (e) {
+          console.error('[logo] Cloudinary upload error:', e && e.stack ? e.stack : e);
           return res.status(500).json({ success: false, message: 'Cloudinary upload failed', error: e.message });
         }
 

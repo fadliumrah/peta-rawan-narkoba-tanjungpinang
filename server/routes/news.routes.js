@@ -142,7 +142,9 @@ router.get('/:id', async (req, res) => {
 // Create news (Admin)
 router.post('/', authenticateToken, (req, res) => {
   uploadNews(req, res, async (err) => {
+    console.log('[news] upload request: filePresent=', !!req.file, 'size=', req.file?.size, 'name=', req.file?.originalname);
     if (err) {
+      console.error('[news] multer error:', err && err.message ? err.message : err);
       return res.status(400).json({ 
         success: false, 
         message: err.message 
@@ -173,6 +175,7 @@ router.post('/', authenticateToken, (req, res) => {
       try {
         uploadResult = await uploadBufferToCloudinary(req.file.buffer, { folder: 'peta-rawan-narkoba/news', filename: req.file.originalname, resource_type: 'image' });
       } catch (e) {
+        console.error('[news] Cloudinary upload error:', e && e.stack ? e.stack : e);
         return res.status(500).json({ success: false, message: 'Cloudinary upload failed', error: e.message });
       }
 

@@ -10,6 +10,7 @@ import net from 'net';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
+import cloudinary from 'cloudinary';
 
 // Import routes
 import bannerRoutes from './routes/banner.routes.js';
@@ -322,6 +323,33 @@ const healthHandler = async (req, res) => {
 // can check the API health even when a static client is being served at root.
 app.get('/health', healthHandler);
 app.get('/api/health', healthHandler);
+
+// Diagnostics endpoint to check external services like Cloudinary
+app.get('/api/diagnostics', async (req, res) => {
+  try {
+    const dbReadyState = mongoose.connection.readyState === 1;
+    let cloudinaryOk = false;
+    let cloudinaryInfo = null;
+    try {
+      cloudinary.v2.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET
+      });
+      // Try listing a small number of resources to verify credentials
+      const result = await cloudinary.v2.api.resources({ max_results: 1 });
+      cloudinaryOk = true;
+      cloudinaryInfo = { total: result.total_count || 0 };
+    } catch (e) {
+      cloudinaryOk = false;
+      cloudinaryInfo = { error: e.message };
+    }
+
+    res.json({ success: true, db: dbReadyState ? 'connected' : 'disconnected', cloudinary: cloudinaryOk ? 'ok' : cloudinaryInfo });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
