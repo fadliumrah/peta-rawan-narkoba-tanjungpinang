@@ -361,8 +361,9 @@ const startServer = async (startPort = PORT, maxAttempts = 10) => {
       continue;
     }
 
-    const server = app.listen(port, () => {
-      console.log(`🚀 Server running on port ${port}`);
+    const host = process.env.HOST || '0.0.0.0';
+    const server = app.listen(port, host, () => {
+      console.log(`🚀 Server running on ${host}:${port}`);
       const ready = mongoose.connection.readyState; // 0 = disconnected, 1 = connected, 2 = connecting
       if (ready === 1) {
         console.log('✅ Database: connected');
