@@ -25,15 +25,9 @@ Common issues & fixes:
 
 Uploads migration and cleanup:
 - The project used to persist uploads to `server/uploads/` before uploading to Cloudinary. We now upload directly from memory to Cloudinary and no longer serve `/uploads`.
-- To safely migrate existing local files to Cloudinary, use the migration script:
-
-  ```bash
-  cd server
-  node scripts/migrate-uploads-to-cloudinary.js --dry-run    # preview
-  node scripts/migrate-uploads-to-cloudinary.js --confirm    # perform migration and backup
-  ```
-
-- After migrating and verifying, you can remove `server/uploads/` or keep a local backup in `server/uploads_backup/`.
+- Migration verification: a dry-run found no local uploads to migrate, so no migration was required.
+- The one-time migration script has been removed from the repository. If you have local files to migrate in the future, keep a backup and contact me and I can re-add a migration tool.
+- After verifying, you can remove `server/uploads/` or keep a local backup in `server/uploads_backup/`.
 
 Logs & debugging:
 - Startup will attempt to connect to MongoDB with retries and exponential backoff; errors are logged with attempt count and messages.
