@@ -32,9 +32,18 @@ const PORT = process.env.PORT || 5000;
 // proxy automatically in production so platforms that set `X-Forwarded-For`
 // (Railway, Render, Heroku, etc.) won't trigger express-rate-limit errors.
 const trustProxyEnv = process.env.TRUST_PROXY;
-const trustProxy = typeof trustProxyEnv !== 'undefined'
-  ? (trustProxyEnv === '1' || trustProxyEnv === 'true')
-  : (process.env.NODE_ENV === 'production');
+// Prefer a numeric (number of trusted proxies) or specific value rather than
+// a permissive boolean `true`. express-rate-limit treats a plain `true`
+// as overly permissive and will raise ERR_ERL_PERMISSIVE_TRUST_PROXY.
+let trustProxy;
+if (typeof trustProxyEnv !== 'undefined') {
+  if (trustProxyEnv === '1' || trustProxyEnv === 'true') trustProxy = 1;
+  else if (!Number.isNaN(Number(trustProxyEnv))) trustProxy = Number(trustProxyEnv);
+  else trustProxy = trustProxyEnv; // allow values like 'loopback'
+} else {
+  // Default to trusting the first proxy in production (typical for PaaS)
+  trustProxy = process.env.NODE_ENV === 'production' ? 1 : false;
+}
 app.set('trust proxy', trustProxy);
 console.log('🔐 Express trust proxy:', trustProxy);
 

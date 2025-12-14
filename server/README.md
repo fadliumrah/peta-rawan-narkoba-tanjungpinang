@@ -4,7 +4,7 @@ Environment variables:
 - `MONGODB_URI`: MongoDB connection string (Atlas or local). Example: `mongodb://localhost:27017/peta-rawan-narkoba` or Atlas connection string.
 - `PORT`: port the server listens on (default `5000`).
 - `WAIT_FOR_DB=1` (optional): if set, server will wait for MongoDB to be reachable before starting; if it cannot connect after retries, the process will exit. When not set, server starts immediately and will continue background retries — write API requests may return 503 until DB is ready.
-- `TRUST_PROXY` (optional): set to `1` or `true` to enable Express `trust proxy` (recommended when behind a load balancer / reverse proxy such as Railway). If unset, the server enables `trust proxy` automatically when `NODE_ENV=production`. This prevents express-rate-limit errors caused by `X-Forwarded-For` headers.
+- `TRUST_PROXY` (optional): set to `1` to trust the first proxy (recommended on PaaS like Railway). Avoid setting `TRUST_PROXY=true` (boolean) because express-rate-limit treats a plain `true` as overly permissive and will raise `ERR_ERL_PERMISSIVE_TRUST_PROXY`. If unset, the server defaults to `1` when `NODE_ENV=production` (recommended).
 
 Common issues & fixes:
 - Port already in use: check which process is using the port and terminate it.
