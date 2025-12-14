@@ -29,6 +29,17 @@ Uploads migration and cleanup:
 - The one-time migration script has been removed from the repository. If you have local files to migrate in the future, keep a backup and contact me and I can re-add a migration tool.
 - After verifying, you can remove `server/uploads/` or keep a local backup in `server/uploads_backup/`.
 
+Client build changes:
+- The repository no longer performs an automatic client build during `npm install` in the `server/` folder. If you need to build the client, run:
+
+  ```bash
+  cd client
+  npm ci
+  npm run build
+  ```
+
+  Or integrate the client build in your CI pipeline.
+
 Logs & debugging:
 - Startup will attempt to connect to MongoDB with retries and exponential backoff; errors are logged with attempt count and messages.
 - Use `/api/health` to check runtime status of the API and DB connectivity.
