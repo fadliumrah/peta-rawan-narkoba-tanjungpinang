@@ -455,20 +455,21 @@ const NewsManager = () => {
         ) : (
           newsList.map((news) => (
             <div key={news._id} className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="flex flex-col md:flex-row">
-                <div className="md:w-1/4 h-40 md:h-auto">
+              <div className="flex flex-col md:flex-row items-start">
+                <div className="w-full md:w-48 h-32 md:h-32 flex-shrink-0 overflow-hidden bg-gray-100 rounded-md">
                   <img
                     src={news.image}
                     alt={news.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover block"
+                    style={{ aspectRatio: '16/9' }}
                   />
                 </div>
                 <div className="flex-1 p-4 md:p-6">
-                  <div className="flex flex-col md:flex-row justify-between items-start mb-2 gap-2">
-                    <h3 className="text-lg md:text-xl font-bold text-gray-800 flex-1 truncate">
+                  <div className="flex justify-between items-start mb-2 gap-3">
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800 flex-1 line-clamp-2 break-words">
                       {news.title}
                     </h3>
-                    <div className="flex gap-2 ml-0 md:ml-4">
+                    <div className="flex-shrink-0 flex items-center gap-2">
                       <button
                         onClick={() => handleTogglePublish(news)}
                         className={`btn btn-xs md:btn-sm ${news.isPublished ? 'btn-warning' : 'btn-success'}`}
@@ -494,7 +495,7 @@ const NewsManager = () => {
                     </div>
                   </div>
                   
-                  <div className="flex flex-wrap gap-2 text-xs md:text-sm text-gray-600 mb-3">
+                  <div className="flex flex-wrap gap-2 text-xs md:text-sm text-gray-600 mb-3 items-center">
                     <span>📅 {formatDateTime(news.createdAt)}</span>
                     <span>✍️ {news.createdBy?.nama || news.editor || 'Unknown'}</span>
                     <span className="flex items-center gap-1">
@@ -506,7 +507,7 @@ const NewsManager = () => {
                     </span>
                   </div>
                   
-                  <p className="text-gray-700 text-sm line-clamp-3">
+                  <p className="text-gray-700 text-sm line-clamp-3 break-words">
                     {stripHtml(news.content)}
                   </p>
                 </div>
