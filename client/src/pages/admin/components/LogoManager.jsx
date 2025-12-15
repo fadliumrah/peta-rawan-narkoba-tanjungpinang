@@ -85,9 +85,16 @@ const LogoManager = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Update Logo BNN</h2>
-        <p className="text-gray-600">Kelola logo dan informasi header website</p>
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-xl p-6 text-white">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold mb-1 flex items-center gap-3">
+              <ImageIcon size={22} className="text-white" />
+              Kelola Logo
+            </h2>
+            <p className="text-sm opacity-90">Preview logo sesuai tampilan header website</p>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

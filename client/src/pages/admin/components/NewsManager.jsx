@@ -309,28 +309,22 @@ const NewsManager = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-xl p-6 text-white">
-        <div className="flex justify-between items-center">
-          <div>
-            <h2 className="text-3xl font-bold mb-2">Kelola Berita</h2>
-            <div className="flex gap-4 text-sm">
-              <p className="text-blue-100">
-                📊 Total: {newsList.length} berita
-              </p>
-              <p className="text-green-200">
-                ✓ Published: {publishedCount}
-              </p>
-              <p className="text-yellow-200">
-                📝 Draft: {draftCount}
-              </p>
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-xl p-4 md:p-6 text-white">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="flex-1">
+            <h2 className="text-2xl md:text-3xl font-bold mb-2">Kelola Berita</h2>
+            <div className="flex flex-wrap gap-3 text-sm">
+              <p className="text-blue-100">📊 Total: {newsList.length} berita</p>
+              <p className="text-green-200">✓ Published: {publishedCount}</p>
+              <p className="text-yellow-200">📝 Draft: {draftCount}</p>
             </div>
           </div>
           <button
             onClick={() => setShowForm(!showForm)}
-            className="btn bg-white text-blue-600 hover:bg-blue-50 border-0 shadow-lg"
+            className="btn bg-white text-blue-600 hover:bg-blue-50 border-0 shadow-lg mt-2 md:mt-0"
           >
             {showForm ? <X size={20} /> : <Plus size={20} />}
-            {showForm ? 'Tutup Form' : 'Tambah Berita'}
+            <span className="ml-2 hidden sm:inline">{showForm ? 'Tutup Form' : 'Tambah Berita'}</span>
           </button>
         </div>
       </div>
@@ -462,36 +456,36 @@ const NewsManager = () => {
           newsList.map((news) => (
             <div key={news._id} className="bg-white rounded-lg shadow-md overflow-hidden">
               <div className="flex flex-col md:flex-row">
-                <div className="md:w-1/4 h-48 md:h-auto">
+                <div className="md:w-1/4 h-40 md:h-auto">
                   <img
                     src={news.image}
                     alt={news.title}
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="flex-1 p-6">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-xl font-bold text-gray-800 flex-1">
+                <div className="flex-1 p-4 md:p-6">
+                  <div className="flex flex-col md:flex-row justify-between items-start mb-2 gap-2">
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800 flex-1 truncate">
                       {news.title}
                     </h3>
-                    <div className="flex gap-2 ml-4">
+                    <div className="flex gap-2 ml-0 md:ml-4">
                       <button
                         onClick={() => handleTogglePublish(news)}
-                        className={`btn btn-sm ${news.isPublished ? 'btn-warning' : 'btn-success'}`}
+                        className={`btn btn-xs md:btn-sm ${news.isPublished ? 'btn-warning' : 'btn-success'}`}
                         title={news.isPublished ? 'Jadikan Draft' : 'Publikasikan'}
                       >
                         {news.isPublished ? '📝' : '✓'}
                       </button>
                       <button
                         onClick={() => handleEdit(news)}
-                        className="btn btn-sm btn-ghost"
+                        className="btn btn-xs md:btn-sm btn-ghost"
                         title="Edit"
                       >
                         <Edit size={16} />
                       </button>
                       <button
                         onClick={() => handleDelete(news)}
-                        className="btn btn-sm btn-ghost text-error"
+                        className="btn btn-xs md:btn-sm btn-ghost text-error"
                         title="Hapus"
                         disabled={deleting && deleteTarget && deleteTarget._id === news._id}
                       >
@@ -500,7 +494,7 @@ const NewsManager = () => {
                     </div>
                   </div>
                   
-                  <div className="flex flex-wrap gap-3 text-sm text-gray-600 mb-3">
+                  <div className="flex flex-wrap gap-2 text-xs md:text-sm text-gray-600 mb-3">
                     <span>📅 {formatDateTime(news.createdAt)}</span>
                     <span>✍️ {news.createdBy?.nama || news.editor || 'Unknown'}</span>
                     <span className="flex items-center gap-1">
@@ -512,7 +506,7 @@ const NewsManager = () => {
                     </span>
                   </div>
                   
-                  <p className="text-gray-700 line-clamp-3">
+                  <p className="text-gray-700 text-sm line-clamp-3">
                     {stripHtml(news.content)}
                   </p>
                 </div>
