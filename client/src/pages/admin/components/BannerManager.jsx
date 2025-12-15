@@ -234,7 +234,7 @@ const BannerManager = () => {
               ✓ Preview dengan container yang sama (container mx-auto px-4) - rasio tinggi-lebar identik dengan halaman user
             </p>
             <p className="text-sm text-gray-600 mt-2 text-center">
-              Tip: <span className="font-semibold">Klik dan geser gambar pada preview</span> untuk menyesuaikan posisi fokus (drag). Setelah selesai, klik "Simpan Pengaturan" atau upload untuk menyimpan posisi.
+              Tip: <span className="font-semibold">(Desktop Access Only!) Klik dan geser gambar pada preview</span> untuk menyesuaikan posisi fokus (drag). Setelah selesai, klik "Simpan Pengaturan" atau upload untuk menyimpan posisi.
             </p>
           </div>
         ) : (
