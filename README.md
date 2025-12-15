@@ -175,7 +175,7 @@ If you prefer to set a known password for the dev super admin, set `SUPER_ADMIN_
 
 ## 📱 Cara Menggunakan
 
-> Perbaikan UX mobile: peta sekarang hanya merespon drag/geser bila menggunakan dua jari, sehingga scrolling halaman pada smartphone tidak terganggu.
+> Perbaikan UX mobile: peta sekarang hanya merespon drag/geser bila menggunakan dua jari (termasuk halaman admin dan public), sehingga scrolling halaman pada smartphone tidak terganggu.
 
 ### Login Admin
 1. Buka http://localhost:3000/admin/login

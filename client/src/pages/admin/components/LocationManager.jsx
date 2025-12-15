@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import { 
   getAllLocations, 
@@ -127,6 +127,56 @@ function ScrollZoomHandler() {
     }
   }, [map]);
   
+  return null;
+}
+
+// Component untuk membuat peta hanya bisa digeser ketika dua jari di perangkat sentuh
+function TouchPanHandler() {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map) return;
+    const container = map.getContainer();
+
+    // Default: allow vertical page pan on touch devices
+    if ('ontouchstart' in window) {
+      container.style.touchAction = 'pan-y';
+      if (map.dragging && map.dragging.enabled()) map.dragging.disable();
+    }
+
+    const onTouchStart = (e) => {
+      const touches = e.touches || [];
+      if (touches.length >= 2) {
+        // Two or more fingers: enable map dragging and prevent page pan
+        container.style.touchAction = 'none';
+        if (map.dragging && !map.dragging.enabled()) map.dragging.enable();
+      } else {
+        // Single finger: let page scroll
+        container.style.touchAction = 'pan-y';
+        if (map.dragging && map.dragging.enabled()) map.dragging.disable();
+      }
+    };
+
+    const onTouchEnd = () => {
+      setTimeout(() => {
+        container.style.touchAction = 'pan-y';
+        if (map.dragging && map.dragging.enabled()) map.dragging.disable();
+      }, 50);
+    };
+
+    container.addEventListener('touchstart', onTouchStart, { passive: true });
+    container.addEventListener('touchend', onTouchEnd);
+    container.addEventListener('touchcancel', onTouchEnd);
+
+    return () => {
+      container.removeEventListener('touchstart', onTouchStart);
+      container.removeEventListener('touchend', onTouchEnd);
+      container.removeEventListener('touchcancel', onTouchEnd);
+      container.style.touchAction = '';
+      if (map.dragging && !map.dragging.enabled()) map.dragging.enable();
+    };
+  }, [map]);
+
   return null;
 }
 
@@ -652,6 +702,7 @@ const LocationManager = () => {
             />
             <MapClickHandler onMapClick={handleMapClick} />
             <ScrollZoomHandler />
+            <TouchPanHandler />
             
             {/* Temporary Draggable Marker */}
             {tempMarker && (
