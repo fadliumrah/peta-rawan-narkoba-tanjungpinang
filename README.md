@@ -199,6 +199,12 @@ If you prefer to set a known password for the dev super admin, set `SUPER_ADMIN_
    - **Klik di Peta**: Aktifkan mode klik, lalu klik di peta
    - **Gunakan GPS**: Klik tombol GPS (perlu izin browser)
 
+## 🔖 Favicon
+- **Lokasi file:** letakkan file favicon di `client/public/`.
+- **Nama file yang digunakan:** `favicon.svg` (utama), `favicon.ico` (fallback), `site.webmanifest` (opsional).
+- **Ganti ikon:** Sistem sekarang mencoba menggunakan logo aktif dari database sebagai favicon secara otomatis (endpoint `/api/logo/active`). Jika Anda ingin memakai file statis khusus, kirim file (SVG/PNG/ICO) dan saya akan masukkan ke `client/public/` dan update referensi di `client/index.html`.
+
+
   ## 📦 Deploy Frontend to Vercel
 
   - Connect your GitHub repository to Vercel and create a new project for the `client` folder.
