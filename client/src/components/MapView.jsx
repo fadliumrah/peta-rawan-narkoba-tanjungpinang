@@ -78,6 +78,59 @@ function ScrollZoomHandler() {
   return null;
 }
 
+// Component untuk membuat peta hanya bisa digeser ketika dua jari (mencegah gangguan saat scroll halaman di smartphone)
+function TouchPanHandler() {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map) return;
+    const container = map.getContainer();
+
+    // For touch devices, default to allowing page vertical pan to avoid blocking scroll
+    if ('ontouchstart' in window) {
+      container.style.touchAction = 'pan-y';
+      if (map.dragging && map.dragging.enabled()) {
+        map.dragging.disable();
+      }
+    }
+
+    const onTouchStart = (e) => {
+      const touches = e.touches || [];
+      if (touches.length >= 2) {
+        // Two-finger gesture: enable map dragging and prevent page pan
+        container.style.touchAction = 'none';
+        if (map.dragging && !map.dragging.enabled()) map.dragging.enable();
+      } else {
+        // Single-finger: let page scroll (map shouldn't capture touch)
+        container.style.touchAction = 'pan-y';
+        if (map.dragging && map.dragging.enabled()) map.dragging.disable();
+      }
+    };
+
+    const onTouchEnd = () => {
+      // Revert to allowing page pan shortly after touch ends
+      setTimeout(() => {
+        container.style.touchAction = 'pan-y';
+        if (map.dragging && map.dragging.enabled()) map.dragging.disable();
+      }, 50);
+    };
+
+    container.addEventListener('touchstart', onTouchStart, { passive: true });
+    container.addEventListener('touchend', onTouchEnd);
+    container.addEventListener('touchcancel', onTouchEnd);
+
+    return () => {
+      container.removeEventListener('touchstart', onTouchStart);
+      container.removeEventListener('touchend', onTouchEnd);
+      container.removeEventListener('touchcancel', onTouchEnd);
+      container.style.touchAction = '';
+      if (map.dragging && !map.dragging.enabled()) map.dragging.enable();
+    };
+  }, [map]);
+
+  return null;
+}
+
 // Daftar semua kelurahan dengan warna
 const allKelurahan = [
   { name: 'Dompak', color: '#FF5733' },
@@ -331,6 +384,7 @@ const MapView = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <ScrollZoomHandler />
+          <TouchPanHandler />
           
           {filteredLocations.length > 0 && <MapBounds locations={filteredLocations} shouldFitBounds={shouldFitBounds} />}
           
