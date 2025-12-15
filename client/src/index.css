@@ -238,17 +238,18 @@
 }
 
 .admin-main {
-  padding-top: var(--admin-header-height, 64px);
+  /* Shift content up slightly for a tighter layout */
+  padding-top: calc(var(--admin-header-height, 64px) - 48px);
 }
 
 /* Keep sidebar always scrollable within the viewport between header and footer */
 .admin-sidebar {
   position: fixed;
   left: 0;
-  top: var(--admin-header-height, 64px);
+  top: calc(var(--admin-header-height, 64px) - 48px);
   bottom: 0;
   width: 16rem; /* w-64 equivalent */
-  height: calc(100vh - var(--admin-header-height));
+  height: calc(100vh - var(--admin-header-height) + 48px);
   overflow-y: auto;
   box-sizing: border-box;
 }
