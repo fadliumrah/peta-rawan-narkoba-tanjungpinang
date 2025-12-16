@@ -348,28 +348,30 @@ const NewsManager = () => {
             )}
 
             <div className="form-control">
-              <label className="label">
+              <label className="label" htmlFor="news-image">
                 <span className="label-text font-semibold">
                   Gambar Berita {!editingId && <span className="text-error"></span>}
                 </span>
               </label>
               <input
+                id="news-image"
+                name="image"
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
                 className="file-input file-input-bordered w-full"
                 required={!editingId}
               />
-              <label className="label">
-                <span className="label-text-alt">Max 5MB (JPG, PNG, WebP)</span>
-              </label>
+              <p className="label-text-alt">Max 5MB (JPG, PNG, WebP)</p>
             </div>
 
             <div className="form-control">
-              <label className="label">
+              <label className="label" htmlFor="news-title">
                 <span className="label-text font-semibold">Judul Berita</span>
               </label>
               <input
+                id="news-title"
+                name="title"
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: capitalizeText(e.target.value) })}
@@ -380,11 +382,12 @@ const NewsManager = () => {
             </div>
 
             <div className="form-control">
-              <label className="label">
+              <label className="label" htmlFor="news-content">
                 <span className="label-text font-semibold">Isi Berita</span>
               </label>
               <div className="border rounded-lg">
                 <ReactQuill
+                  id="news-content"
                   theme="snow"
                   value={formData.content}
                   onChange={(content) => setFormData({ ...formData, content })}

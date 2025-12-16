@@ -84,10 +84,11 @@ const AdminLogin = () => {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="form-control">
-              <label className="label py-1">
+              <label className="label py-1" htmlFor="login-username">
                 <span className="label-text font-semibold text-gray-700">Username</span>
               </label>
               <input
+                id="login-username"
                 type="text"
                 name="username"
                 value={formData.username}
@@ -100,11 +101,12 @@ const AdminLogin = () => {
             </div>
 
             <div className="form-control">
-              <label className="label py-1">
+              <label className="label py-1" htmlFor="login-password">
                 <span className="label-text font-semibold text-gray-700">Password</span>
               </label>
               <div className="relative">
                 <input
+                  id="login-password"
                   type={showPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}

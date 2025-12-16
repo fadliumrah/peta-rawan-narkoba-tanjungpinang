@@ -287,10 +287,12 @@ const AdminManager = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="form-control">
-                <label className="label">
+                <label className="label" htmlFor="nama">
                   <span className="label-text font-semibold">Nama Lengkap *</span>
                 </label>
                 <input
+                  id="nama"
+                  name="nama"
                   type="text"
                   value={formData.nama}
                   onChange={(e) => {
@@ -306,16 +308,16 @@ const AdminManager = () => {
                   placeholder="Nama sesuai KTP"
                   required
                 />
-                <label className="label">
-                  <span className="label-text-alt text-info">Otomatis huruf kapital</span>
-                </label>
+                <p className="label-text-alt text-info">Otomatis huruf kapital</p>
               </div>
 
               <div className="form-control">
-                <label className="label">
+                <label className="label" htmlFor="nomorKtp">
                   <span className="label-text font-semibold">Nomor KTP *</span>
                 </label>
                 <input
+                  id="nomorKtp"
+                  name="nomorKtp"
                   type="text"
                   value={formData.nomorKtp}
                   onChange={(e) => {
@@ -327,18 +329,16 @@ const AdminManager = () => {
                   required
                   maxLength={16}
                 />
-                <label className="label">
-                  <span className="label-text-alt">
-                    {formData.nomorKtp.length}/16 digit
-                  </span>
-                </label>
+                <p className="label-text-alt">{formData.nomorKtp.length}/16 digit</p>
               </div>
 
               <div className="form-control">
-                <label className="label">
+                <label className="label" htmlFor="username">
                   <span className="label-text font-semibold">Username *</span>
                 </label>
                 <input
+                  id="username"
+                  name="username"
                   type="text"
                   value={formData.username}
                   className="input input-bordered bg-gray-100"
@@ -346,18 +346,18 @@ const AdminManager = () => {
                   required
                   readOnly
                 />
-                <label className="label">
-                  <span className="label-text-alt text-info">Dibuat otomatis dari nama</span>
-                </label>
+                <p className="label-text-alt text-info">Dibuat otomatis dari nama</p>
               </div>
 
               {!editingId && (
                 <div className="form-control">
-                  <label className="label">
+                  <label className="label" htmlFor="password">
                     <span className="label-text font-semibold">Password *</span>
                   </label>
                   <div className="relative">
                     <input
+                      id="password"
+                      name="password"
                       type={showPassword ? "text" : "password"}
                       value={formData.password}
                       onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -525,11 +525,13 @@ const AdminManager = () => {
             
             <form onSubmit={handleResetPassword} className="space-y-4">
               <div className="form-control">
-                <label className="label">
+                <label className="label" htmlFor="newPassword">
                   <span className="label-text">Password Baru</span>
                 </label>
                 <div className="relative">
                   <input
+                    id="newPassword"
+                    name="newPassword"
                     type={showNewPassword ? "text" : "password"}
                     value={resetPasswordData.newPassword}
                     onChange={(e) => setResetPasswordData({ 
@@ -553,11 +555,13 @@ const AdminManager = () => {
               </div>
 
               <div className="form-control">
-                <label className="label">
+                <label className="label" htmlFor="confirmPassword">
                   <span className="label-text">Konfirmasi Password</span>
                 </label>
                 <div className="relative">
                   <input
+                    id="confirmPassword"
+                    name="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
                     value={resetPasswordData.confirmPassword}
                     onChange={(e) => setResetPasswordData({ 

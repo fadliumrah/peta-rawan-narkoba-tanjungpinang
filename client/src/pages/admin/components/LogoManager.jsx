@@ -127,26 +127,28 @@ const LogoManager = () => {
           <h3 className="font-bold text-xl mb-4 text-gray-800">Update Logo</h3>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="form-control">
-              <label className="label">
+              <label className="label" htmlFor="logo-image">
                 <span className="label-text font-semibold">Pilih Logo BNN</span>
               </label>
               <input
+                id="logo-image"
+                name="image"
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
                 className="file-input file-input-bordered w-full"
                 required
               />
-              <label className="label">
-                <span className="label-text-alt">Max 2MB (JPG, PNG, SVG recommended)</span>
-              </label>
+              <p className="label-text-alt">Max 2MB (JPG, PNG, SVG recommended)</p>
             </div>
 
             <div className="form-control">
-              <label className="label">
+              <label className="label" htmlFor="logo-title">
                 <span className="label-text font-semibold">Title</span>
               </label>
               <input
+                id="logo-title"
+                name="title"
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -157,10 +159,12 @@ const LogoManager = () => {
             </div>
 
             <div className="form-control">
-              <label className="label">
+              <label className="label" htmlFor="logo-subtitle">
                 <span className="label-text font-semibold">Subtitle</span>
               </label>
               <input
+                id="logo-subtitle"
+                name="subtitle"
                 type="text"
                 value={formData.subtitle}
                 onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}

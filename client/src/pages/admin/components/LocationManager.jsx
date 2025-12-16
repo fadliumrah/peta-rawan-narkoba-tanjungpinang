@@ -502,10 +502,12 @@ const LocationManager = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Koordinat Input */}
               <div className="form-control">
-                <label className="label">
+                <label className="label" htmlFor="latitude">
                   <span className="label-text font-semibold">Latitude</span>
                 </label>
                 <input
+                  id="latitude"
+                  name="latitude"
                   type="number"
                   step="any"
                   value={formData.latitude}
@@ -517,10 +519,12 @@ const LocationManager = () => {
               </div>
 
               <div className="form-control">
-                <label className="label">
+                <label className="label" htmlFor="longitude">
                   <span className="label-text font-semibold">Longitude</span>
                 </label>
                 <input
+                  id="longitude"
+                  name="longitude"
                   type="number"
                   step="any"
                   value={formData.longitude}
@@ -534,9 +538,7 @@ const LocationManager = () => {
 
             {/* Buttons untuk pilih koordinat */}
             <div className="space-y-2">
-              <label className="label">
-                <span className="label-text font-semibold">Cara Pilih Lokasi:</span>
-              </label>
+              <p className="font-semibold mb-1">Cara Pilih Lokasi:</p>
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
@@ -570,11 +572,12 @@ const LocationManager = () => {
             </div>
 
             <div className="form-control">
-              <label className="label">
-                <span className="label-text font-semibold">Kelurahan *</span>
-              </label>
-              <select
-                value={formData.kelurahan}
+                <label className="label" htmlFor="kelurahan">
+                  <span className="label-text font-semibold">Kelurahan *</span>
+                </label>
+                <select
+                  id="kelurahan"
+                  name="kelurahan"
                 onChange={(e) => handleKelurahanChange(e.target.value)}
                 className="select select-bordered"
                 required
@@ -584,16 +587,16 @@ const LocationManager = () => {
                   <option key={k} value={k}>{k}</option>
                 ))}
               </select>
-              <label className="label">
-                <span className="label-text-alt text-info">Warna marker akan otomatis sesuai kelurahan</span>
-              </label>
+              <p className="label-text-alt text-info">Warna marker akan otomatis sesuai kelurahan</p>
             </div>
 
             <div className="form-control">
-              <label className="label">
+              <label className="label" htmlFor="description">
                 <span className="label-text font-semibold">Catatan (Opsional)</span>
               </label>
               <textarea
+                id="description"
+                name="description"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 className="textarea textarea-bordered"

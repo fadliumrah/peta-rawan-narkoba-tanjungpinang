@@ -95,6 +95,8 @@ const NewsList = ({ limit = 6 }) => {
             <Search className="h-5 w-5 text-gray-400" />
           </div>
           <input
+            id="news-search"
+            name="search"
             type="text"
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}

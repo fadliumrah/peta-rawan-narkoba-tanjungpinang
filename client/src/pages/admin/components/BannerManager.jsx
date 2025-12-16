@@ -338,14 +338,12 @@ const BannerManager = () => {
                 <option value="fill">Fill - Regangkan gambar</option>
                 <option value="scale-down">Scale Down - Kecilkan jika terlalu besar</option>
               </select>
-              <label className="label">
-                <span className="label-text-alt text-gray-500">
-                  {formData.imageFit === 'cover' && '📸 Gambar akan memenuhi area tanpa distorsi (recommended)'}
-                  {formData.imageFit === 'contain' && '🖼️ Gambar ditampilkan utuh dengan latar belakang'}
-                  {formData.imageFit === 'fill' && '↔️ Gambar diregangkan memenuhi area'}
-                  {formData.imageFit === 'scale-down' && '🔽 Gambar diperkecil jika terlalu besar'}
-                </span>
-              </label>
+              <p className="label-text-alt text-gray-500">
+                {formData.imageFit === 'cover' && '📸 Gambar akan memenuhi area tanpa distorsi (recommended)'}
+                {formData.imageFit === 'contain' && '🖼️ Gambar ditampilkan utuh dengan latar belakang'}
+                {formData.imageFit === 'fill' && '↔️ Gambar diregangkan memenuhi area'}
+                {formData.imageFit === 'scale-down' && '🔽 Gambar diperkecil jika terlalu besar'}
+              </p>
             </div>
 
             <button
