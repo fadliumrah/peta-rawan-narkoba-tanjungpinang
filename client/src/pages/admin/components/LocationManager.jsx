@@ -627,7 +627,8 @@ const LocationManager = () => {
             Peta Lokasi
           </h3>
           {clickMode && (
-            <div className="badge badge-success gap-2">
+            // Hide the bold green pill on small screens to avoid visual clutter on mobile
+            <div className="hidden sm:inline-flex badge badge-success gap-2">
               <MapPin size={16} />
               Klik peta untuk pilih lokasi
             </div>
@@ -652,17 +653,18 @@ const LocationManager = () => {
         <div className="h-[500px] rounded-lg overflow-hidden border-2 border-gray-300 shadow-lg relative">
           {/* Panel Konfirmasi Lokasi - Compact & Efisien */}
           {showConfirm && tempMarker && (
-            <div className="absolute top-3 right-3 z-[1000] w-[240px] bg-white/98 backdrop-blur-sm border-2 border-green-500 rounded-lg shadow-2xl">
+            // Make the confirmation panel less visually aggressive on small screens
+            <div className="absolute top-3 right-3 z-[1000] w-[240px] bg-white/98 backdrop-blur-sm border-2 border-gray-200 sm:border-green-500 rounded-lg shadow-2xl">
               <div className="p-2">
                 <div className="flex items-center gap-1 mb-1.5">
-                  <MapPin className="text-green-600" size={12} />
-                  <p className="font-bold text-green-900 text-xs">Lokasi Baru</p>
+                  <MapPin className="text-gray-600 sm:text-green-600" size={12} />
+                  <p className="font-bold text-gray-700 sm:text-green-900 text-xs">Lokasi Baru</p>
                 </div>
                 <div className="space-y-0.5 mb-2">
-                  <p className="text-[10px] text-green-800 font-mono bg-green-50 px-1.5 py-0.5 rounded">
+                  <p className="text-[10px] text-gray-700 font-mono bg-gray-100 px-1.5 py-0.5 rounded sm:text-green-800 sm:bg-green-50">
                     Lat: <span className="font-bold">{tempMarker.lat.toFixed(6)}</span>
                   </p>
-                  <p className="text-[10px] text-green-800 font-mono bg-green-50 px-1.5 py-0.5 rounded">
+                  <p className="text-[10px] text-gray-700 font-mono bg-gray-100 px-1.5 py-0.5 rounded sm:text-green-800 sm:bg-green-50">
                     Lng: <span className="font-bold">{tempMarker.lng.toFixed(6)}</span>
                   </p>
                 </div>

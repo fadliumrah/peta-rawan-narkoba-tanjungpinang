@@ -437,12 +437,13 @@ const AdminManager = () => {
                     </td>
                     <td>
                       {admin.isActive ? (
-                        <span className="badge badge-success gap-1">
+                        // Reduce visual weight on mobile by using a smaller badge
+                        <span className="badge badge-success gap-1 badge-xs">
                           <UserCheck size={14} />
                           Aktif
                         </span>
                       ) : (
-                        <span className="badge badge-error gap-1">
+                        <span className="badge badge-error gap-1 badge-xs">
                           <UserX size={14} />
                           Nonaktif
                         </span>
