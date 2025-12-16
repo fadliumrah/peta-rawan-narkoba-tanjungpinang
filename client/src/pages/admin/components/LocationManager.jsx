@@ -778,37 +778,49 @@ const LocationManager = () => {
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         {/* Filter Section */}
         <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-200">
-          <div className="flex items-center gap-4">
-            <label className="flex items-center gap-2 font-semibold text-gray-700">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-              </svg>
-              Filter Kelurahan:
-            </label>
-            <select 
-              value={filterKelurahan}
-              onChange={(e) => setFilterKelurahan(e.target.value)}
-              className="select select-bordered select-sm w-auto rounded-full px-3 bg-white ml-auto"
-              aria-label="Filter Kelurahan"
-            >
-              <option value="">🌍 Tampilkan Semua ({locations.length} Lokasi)</option>
-              {uniqueKelurahan.map((kelurahan) => (
-                <option key={kelurahan} value={kelurahan}>
-                  {kelurahan} ({locations.filter(loc => loc.kelurahan === kelurahan).length})
-                </option>
-              ))}
-            </select>
-            {filterKelurahan && (
-              <button
-                onClick={() => setFilterKelurahan('')}
-                className="btn btn-sm btn-ghost text-blue-600 hover:text-blue-800 ml-2 p-2"
-                title="Reset Filter"
-                aria-label="Reset filter"
-              >
-                <X size={16} />
-              </button>
-            )}
-            <div className="ml-auto text-sm text-gray-600">
+          {/* Responsive: stack on small screens to avoid overflow/cut-off */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <label className="flex items-center gap-2 font-semibold text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                Filter Kelurahan:
+              </label>
+
+              <div className="flex items-center gap-2 ml-auto sm:ml-0 w-full sm:w-auto">
+                <select 
+                  value={filterKelurahan}
+                  onChange={(e) => setFilterKelurahan(e.target.value)}
+                  className="select select-bordered select-sm w-full sm:w-auto min-w-0 rounded-full px-3 bg-white"
+                  aria-label="Filter Kelurahan"
+                >
+                  <option value="">🌍 Tampilkan Semua ({locations.length} Lokasi)</option>
+                  {uniqueKelurahan.map((kelurahan) => (
+                    <option key={kelurahan} value={kelurahan}>
+                      {kelurahan} ({locations.filter(loc => loc.kelurahan === kelurahan).length})
+                    </option>
+                  ))}
+                </select>
+
+                {filterKelurahan && (
+                  <button
+                    onClick={() => setFilterKelurahan('')}
+                    className="btn btn-sm btn-ghost text-blue-600 hover:text-blue-800 p-2"
+                    title="Reset Filter"
+                    aria-label="Reset filter"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Counts: show on desktop in header, on mobile below */}
+            <div className="hidden sm:block ml-auto text-sm text-gray-600">
+              Menampilkan: <span className="font-bold text-blue-700">{filteredLocations.length}</span> dari <span className="font-bold">{locations.length}</span> lokasi
+            </div>
+            <div className="sm:hidden text-sm text-gray-600 mt-2">
               Menampilkan: <span className="font-bold text-blue-700">{filteredLocations.length}</span> dari <span className="font-bold">{locations.length}</span> lokasi
             </div>
           </div>

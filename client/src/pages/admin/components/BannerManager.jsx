@@ -258,11 +258,13 @@ const BannerManager = () => {
           </h3>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="form-control">
-              <label className="label">
+              <label className="label" htmlFor="banner-image">
                 <span className="label-text font-semibold">Pilih Gambar Banner</span>
               </label>
               <div className="flex gap-2">
                 <input
+                  id="banner-image"
+                  name="image"
                   ref={fileInputRef}
                   type="file"
                   accept="image/*"
@@ -280,21 +282,21 @@ const BannerManager = () => {
                   </button>
                 )}
               </div>
-              <label className="label">
-                <span className="label-text-alt">
-                  Max 5MB • Rekomendasi: 1200x400px • Format: JPG, PNG, WebP
-                  {formData.image && (
-                    <span className="text-success ml-2">✓ Gambar siap diupload</span>
-                  )}
-                </span>
-              </label>
+              <p className="label-text-alt text-sm">
+                Max 5MB • Rekomendasi: 1200x400px • Format: JPG, PNG, WebP
+                {formData.image && (
+                  <span className="text-success ml-2">✓ Gambar siap diupload</span>
+                )}
+              </p>
             </div>
 
             <div className="form-control">
-              <label className="label">
+              <label className="label" htmlFor="banner-caption">
                 <span className="label-text font-semibold">Caption</span>
               </label>
               <input
+                id="banner-caption"
+                name="caption"
                 type="text"
                 value={formData.caption}
                 onChange={(e) => setFormData({ ...formData, caption: e.target.value })}
@@ -305,10 +307,12 @@ const BannerManager = () => {
             </div>
 
             <div className="form-control">
-              <label className="label">
+              <label className="label" htmlFor="banner-location">
                 <span className="label-text font-semibold">Lokasi</span>
               </label>
               <input
+                id="banner-location"
+                name="location"
                 type="text"
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
@@ -319,10 +323,12 @@ const BannerManager = () => {
             </div>
 
             <div className="form-control">
-              <label className="label">
+              <label className="label" htmlFor="banner-imageFit">
                 <span className="label-text font-semibold">Tampilan Gambar</span>
               </label>
               <select
+                id="banner-imageFit"
+                name="imageFit"
                 value={formData.imageFit}
                 onChange={(e) => setFormData({ ...formData, imageFit: e.target.value })}
                 className="select select-bordered w-full"
