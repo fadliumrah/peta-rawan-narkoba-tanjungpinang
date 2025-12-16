@@ -540,6 +540,7 @@ const NewsManager = () => {
         confirmLabel={publishTarget ? (publishTarget.newState ? 'Publikasikan' : 'Jadikan Draft') : 'Konfirmasi'}
         cancelLabel="Batal"
         isBusy={publishing}
+        busyLabel={publishTarget ? (publishTarget.newState ? 'Mempublikasikan...' : 'Menjadikan Draft...') : 'Memproses...'}
         confirmClassName={publishTarget ? (publishTarget.newState ? 'btn btn-primary' : 'btn btn-ghost') : 'btn'}
       />
       {/* Confirm Publish/Draft Modal (Form-level) */}
@@ -552,6 +553,7 @@ const NewsManager = () => {
         confirmLabel={formPublishTarget ? 'Publikasikan' : 'Jadikan Draft'}
         cancelLabel="Batal"
         isBusy={formPublishing}
+        busyLabel={formPublishTarget !== null ? (formPublishTarget ? 'Mempublikasikan...' : 'Menjadikan Draft...') : 'Memproses...'}
         confirmClassName={formPublishTarget ? 'btn btn-primary' : 'btn btn-ghost'}
       />
 
