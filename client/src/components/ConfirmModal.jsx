@@ -9,7 +9,11 @@ const ConfirmModal = ({
   onConfirm,
   confirmLabel = 'Hapus',
   cancelLabel = 'Batal',
-  isBusy = false
+  isBusy = false,
+  // Use a neutral busy label by default; callers can override (e.g., 'Menghapus...')
+  busyLabel = 'Memproses...',
+  // Allow overriding confirm button classes if needed (default keeps 'danger' style)
+  confirmClassName = 'btn btn-error'
 }) => {
   if (!isOpen) return null;
 
@@ -23,7 +27,7 @@ const ConfirmModal = ({
         {children}
         <div className="modal-action mt-4">
           <button className="btn" onClick={onCancel} disabled={isBusy}>{cancelLabel}</button>
-          <button className="btn btn-error" onClick={onConfirm} disabled={isBusy}>{isBusy ? 'Menghapus...' : confirmLabel}</button>
+          <button className={confirmClassName} onClick={onConfirm} disabled={isBusy}>{isBusy ? busyLabel : confirmLabel}</button>
         </div>
       </div>
     </div>

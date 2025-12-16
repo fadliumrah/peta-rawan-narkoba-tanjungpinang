@@ -894,8 +894,7 @@ const LocationManager = () => {
         onConfirm={confirmDelete}
         confirmLabel="Hapus Lokasi"
         cancelLabel="Batal"
-        isBusy={deleting}
-      />
+        isBusy={deleting}        busyLabel="Menghapus..."      />
 
       {/* Toast Notifications */}
       {toasts.map((toast) => (

@@ -527,6 +527,7 @@ const NewsManager = () => {
         confirmLabel="Hapus Berita"
         cancelLabel="Batal"
         isBusy={deleting}
+        busyLabel="Menghapus..."
       />
 
       {/* Confirm Publish/Draft Modal (List-level) */}
@@ -539,6 +540,7 @@ const NewsManager = () => {
         confirmLabel={publishTarget ? (publishTarget.newState ? 'Publikasikan' : 'Jadikan Draft') : 'Konfirmasi'}
         cancelLabel="Batal"
         isBusy={publishing}
+        confirmClassName={publishTarget ? (publishTarget.newState ? 'btn btn-primary' : 'btn btn-ghost') : 'btn'}
       />
       {/* Confirm Publish/Draft Modal (Form-level) */}
       <ConfirmModal
@@ -550,6 +552,7 @@ const NewsManager = () => {
         confirmLabel={formPublishTarget ? 'Publikasikan' : 'Jadikan Draft'}
         cancelLabel="Batal"
         isBusy={formPublishing}
+        confirmClassName={formPublishTarget ? 'btn btn-primary' : 'btn btn-ghost'}
       />
 
       {/* Toast Notifications */}

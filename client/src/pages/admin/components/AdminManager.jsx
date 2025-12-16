@@ -612,8 +612,7 @@ const AdminManager = () => {
         onConfirm={confirmDelete}
         confirmLabel="Hapus Admin"
         cancelLabel="Batal"
-        isBusy={deleting}
-      />
+        isBusy={deleting}        busyLabel="Menghapus..."      />
 
       {/* Toast Notifications */}
       {toasts.map((toast) => (
