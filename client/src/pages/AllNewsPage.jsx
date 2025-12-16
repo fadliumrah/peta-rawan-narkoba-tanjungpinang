@@ -251,7 +251,7 @@ const AllNewsPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Search Input */}
             <div className="md:col-span-2">
-              <label className="label">
+              <label className="label" htmlFor="search">
                 <span className="label-text font-semibold flex items-center gap-2">
                   <Search size={16} />
                   Cari Berita
@@ -262,6 +262,8 @@ const AllNewsPage = () => {
                   <Search className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
+                  id="search"
+                  name="search"
                   type="text"
                   value={searchQuery}
                   onChange={(e) => handleSearch(e.target.value)}
@@ -282,13 +284,15 @@ const AllNewsPage = () => {
 
             {/* Sort Dropdown */}
             <div>
-              <label className="label">
+              <label className="label" htmlFor="sort">
                 <span className="label-text font-semibold flex items-center gap-2">
                   <Filter size={16} />
                   Urutkan
                 </span>
               </label>
               <select
+                id="sort"
+                name="sort"
                 value={sortBy}
                 onChange={(e) => handleSortChange(e.target.value)}
                 className="select select-bordered w-full"
