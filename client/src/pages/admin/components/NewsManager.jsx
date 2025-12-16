@@ -465,11 +465,11 @@ const NewsManager = () => {
                   />
                 </div>
                 <div className="flex-1 p-4 md:p-6">
-                  <div className="flex justify-between items-start mb-2 gap-3">
-                    <h3 className="text-lg md:text-xl font-bold text-gray-800 flex-1 line-clamp-2 break-words">
+                  <div className="mb-2 flex flex-col gap-2">
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800 break-words whitespace-pre-line">
                       {news.title}
                     </h3>
-                    <div className="flex-shrink-0 flex items-center gap-2">
+                    <div className="flex flex-row flex-wrap gap-2 mt-1">
                       <button
                         onClick={() => handleTogglePublish(news)}
                         className={`btn btn-xs md:btn-sm ${news.isPublished ? 'btn-warning' : 'btn-success'}`}
