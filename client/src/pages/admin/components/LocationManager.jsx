@@ -795,7 +795,7 @@ const LocationManager = () => {
                 <select 
                   value={filterKelurahan}
                   onChange={(e) => setFilterKelurahan(e.target.value)}
-                  className="select select-bordered select-sm w-full sm:w-auto min-w-0 rounded-full px-3 bg-white"
+                  className="select select-bordered select-sm w-full sm:w-auto min-w-[180px] pr-8 rounded-full px-3 bg-white"
                   aria-label="Filter Kelurahan"
                 >
                   <option value="">🌍 Tampilkan Semua ({locations.length} Lokasi)</option>
