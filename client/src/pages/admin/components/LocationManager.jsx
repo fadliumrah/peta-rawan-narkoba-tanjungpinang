@@ -784,7 +784,7 @@ const LocationManager = () => {
           {/* Responsive: stack on small screens to avoid overflow/cut-off */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             <div className="flex items-center gap-2 w-full sm:w-auto">
-              <label className="flex items-center gap-2 font-semibold text-gray-700">
+              <label htmlFor="filterKelurahan" className="flex items-center gap-2 font-semibold text-gray-700">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                 </svg>
@@ -793,6 +793,8 @@ const LocationManager = () => {
 
               <div className="flex items-center gap-2 ml-auto sm:ml-0 w-full sm:w-auto">
                 <select 
+                  id="filterKelurahan"
+                  name="filterKelurahan"
                   value={filterKelurahan}
                   onChange={(e) => setFilterKelurahan(e.target.value)}
                   className="select select-bordered select-sm w-full sm:w-auto min-w-[180px] pr-8 rounded-full px-3 bg-white"
