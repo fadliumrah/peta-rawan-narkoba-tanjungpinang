@@ -359,7 +359,7 @@ const BannerManager = () => {
               ) : (
                 <>
                   {formData.image ? <Upload size={20} /> : <Save size={20} />}
-                  {formData.image ? '📤 Update Caption' : '💾 Simpan Pengaturan'}
+                  {formData.image ? '📤 Update Caption' : 'Simpan Pengaturan'}
                 </>
               )}
             </button>
