@@ -19,7 +19,21 @@ api.interceptors.request.use(
     }
     return config;
   },
+  (error) => Promise.reject(error)
+);
+
+// Auto-logout if token expired (401 Unauthorized)
+api.interceptors.response.use(
+  (response) => response,
   (error) => {
+    if (error.response && error.response.status === 401) {
+      // Remove token and user info, redirect to login
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      if (window.location.pathname !== '/admin/login') {
+        window.location.href = '/admin/login';
+      }
+    }
     return Promise.reject(error);
   }
 );
