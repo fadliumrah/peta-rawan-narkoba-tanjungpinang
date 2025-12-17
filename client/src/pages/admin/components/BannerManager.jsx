@@ -215,9 +215,6 @@ const BannerManager = () => {
                     }}
                     draggable={false}
                   />
-                  <div className="absolute left-2 top-2 bg-white/80 rounded px-2 py-1 text-xs text-gray-700 shadow">
-                    Posisi: X {Math.round(imagePosition.x)}% | Y {Math.round(imagePosition.y)}%
-                  </div>
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4">
                     <h2 className="text-white text-xl font-bold mb-1 drop-shadow-lg">
                       {formData.caption || 'NARKOBA ADALAH MUSUH BERSAMA'}
@@ -230,9 +227,6 @@ const BannerManager = () => {
               </div>
             </div>
 
-            <p className="text-xs text-gray-500 mt-3 italic text-center">
-              ✓ Preview dengan container yang sama (container mx-auto px-4) - rasio tinggi-lebar identik dengan halaman user
-            </p>
             <p className="text-sm text-gray-600 mt-2 text-center">
               Tip: <span className="font-semibold">(Desktop Access Only!) Klik dan geser gambar pada preview</span> untuk menyesuaikan posisi fokus (drag). Setelah selesai, klik "Simpan Pengaturan" atau upload untuk menyimpan posisi.
             </p>
