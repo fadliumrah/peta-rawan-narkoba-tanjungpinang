@@ -19,6 +19,22 @@ cloudinary.v2.config({
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Helper: normalize title to Title Case and basic validation
+function toTitleCase(str) {
+  return String(str || '')
+    .toLowerCase()
+    .replace(/\b([a-zà-ÿ])([a-zà-ÿ']*)/gi, (match, first, rest) =>
+      first.toUpperCase() + rest.toLowerCase()
+    );
+}
+
+function validateTitle(title) {
+  if (!title || !String(title).trim()) return { ok: false, message: 'Title is required' };
+  const t = String(title).trim();
+  if (t.length > 200) return { ok: false, message: 'Title is too long (max 200 characters)' };
+  return { ok: true, title: toTitleCase(t) };
+}
+
 const router = express.Router();
 
 // Get all news (Public gets published only, Admin gets all)
@@ -160,13 +176,22 @@ router.post('/', authenticateToken, (req, res) => {
           message: 'News image is required' 
         });
       }
-      if (!title || !content) {
+
+      // Validate and normalize title
+      const titleValidation = validateTitle(title);
+      if (!titleValidation.ok) {
+        if (req.file && req.file.path) fs.unlinkSync(req.file.path);
+        return res.status(400).json({ success: false, message: titleValidation.message });
+      }
+      const normalizedTitle = titleValidation.title;
+
+      if (!content || !String(content).trim()) {
         if (req.file && req.file.path) {
           fs.unlinkSync(req.file.path);
         }
         return res.status(400).json({ 
           success: false, 
-          message: 'Title and content are required' 
+          message: 'Content is required' 
         });
       }
 
@@ -183,7 +208,7 @@ router.post('/', authenticateToken, (req, res) => {
       const imagePublicId = uploadResult.public_id;
 
       const news = new News({
-        title,
+        title: normalizedTitle,
         image: imagePath,
         imagePublicId,
         content,
@@ -238,7 +263,14 @@ router.put('/:id', authenticateToken, (req, res) => {
       }
 
       // Update fields
-      if (title) news.title = title;
+      if (title) {
+        const titleValidation = validateTitle(title);
+        if (!titleValidation.ok) {
+          if (req.file && req.file.path) fs.unlinkSync(req.file.path);
+          return res.status(400).json({ success: false, message: titleValidation.message });
+        }
+        news.title = titleValidation.title;
+      }
       if (content) news.content = content;
       if (isPublished !== undefined) news.isPublished = isPublished;
 

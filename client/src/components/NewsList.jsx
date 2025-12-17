@@ -1,3 +1,11 @@
+// Helper untuk title case yang konsisten dan profesional
+function toTitleCase(str) {
+  return str
+    .toLowerCase()
+    .replace(/\b([a-zà-ÿ])([a-zà-ÿ']*)/gi, (match, first, rest) =>
+      first.toUpperCase() + rest.toLowerCase()
+    );
+}
 import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllNews } from '../services/api';
@@ -168,8 +176,8 @@ const NewsList = ({ limit = 6 }) => {
                   />
                 </div>
                 <div className="p-5 flex flex-col flex-1">
-                  <h3 className="font-bold text-lg mb-3 line-clamp-3 hover:text-primary transition-colors leading-tight min-h-[4.5rem]">
-                    {item.title}
+                  <h3 className="font-bold text-2xl md:text-base mb-2 line-clamp-3 hover:text-primary transition-colors leading-snug min-h-[3.5rem]">
+                    {toTitleCase(item.title || '')}
                   </h3>
                   <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed flex-1">
                     {stripHtml(item.content)}

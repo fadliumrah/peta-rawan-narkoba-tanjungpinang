@@ -21,6 +21,15 @@ import Toast from '../../../components/Toast';
 import ConfirmModal from '../../../components/ConfirmModal';
 import { useToast } from '../../../hooks/useToast';
 
+// Helper untuk title case (konsisten dengan halaman user)
+function toTitleCase(str) {
+  return String(str || '')
+    .toLowerCase()
+    .replace(/\b([a-zà-ÿ])([a-zà-ÿ']*)/gi, (match, first, rest) =>
+      first.toUpperCase() + rest.toLowerCase()
+    );
+}
+
 const NewsManager = () => {
   const [newsList, setNewsList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -374,7 +383,7 @@ const NewsManager = () => {
                 name="title"
                 type="text"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: capitalizeText(e.target.value) })}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 className="input input-bordered w-full"
                 placeholder="Masukkan judul berita"
                 required
@@ -462,15 +471,15 @@ const NewsManager = () => {
                 <div className="w-full md:w-48 h-32 md:h-32 flex-shrink-0 overflow-hidden bg-gray-100 rounded-md">
                   <img
                     src={news.image}
-                    alt={news.title}
+                    alt={toTitleCase(news.title)}
                     className="w-full h-full object-cover block"
                     style={{ aspectRatio: '16/9' }}
                   />
                 </div>
                 <div className="flex-1 p-4 md:p-6">
                   <div className="mb-2 flex flex-col gap-2">
-                    <h3 className="text-lg md:text-xl font-bold text-gray-800 break-words whitespace-pre-line">
-                      {news.title}
+                    <h3 className="font-bold text-2xl md:text-base mb-2 break-words whitespace-pre-line text-gray-800">
+                      {toTitleCase(news.title)}
                     </h3>
                     <div className="flex flex-row flex-wrap gap-2 mt-1">
                       <button
@@ -524,7 +533,7 @@ const NewsManager = () => {
       <ConfirmModal
         isOpen={showDeleteConfirm && deleteTarget}
         title="Konfirmasi Hapus Berita"
-        description={deleteTarget ? `Apakah Anda yakin ingin menghapus berita "${deleteTarget.title}"?` : ''}
+        description={deleteTarget ? `Apakah Anda yakin ingin menghapus berita "${toTitleCase(deleteTarget.title)}"?` : ''}
         onCancel={cancelDelete}
         onConfirm={confirmDelete}
         confirmLabel="Hapus Berita"
@@ -537,7 +546,7 @@ const NewsManager = () => {
       <ConfirmModal
         isOpen={showPublishConfirm && publishTarget}
         title={publishTarget !== null ? (publishTarget.newState ? 'Konfirmasi Publikasikan' : 'Konfirmasi Jadikan Draft') : 'Konfirmasi'}
-        description={publishTarget !== null ? (publishTarget.newState ? `Apakah Anda yakin ingin mempublikasikan berita "${publishTarget.news.title}"?` : `Apakah Anda yakin ingin menjadikan berita "${publishTarget.news.title}" sebagai draft?`) : ''}
+        description={publishTarget !== null ? (publishTarget.newState ? `Apakah Anda yakin ingin mempublikasikan berita "${toTitleCase(publishTarget.news.title)}"?` : `Apakah Anda yakin ingin menjadikan berita "${toTitleCase(publishTarget.news.title)}" sebagai draft?`) : ''}
         onCancel={cancelPublish}
         onConfirm={confirmPublish}
         confirmLabel={publishTarget ? (publishTarget.newState ? 'Publikasikan' : 'Jadikan Draft') : 'Konfirmasi'}

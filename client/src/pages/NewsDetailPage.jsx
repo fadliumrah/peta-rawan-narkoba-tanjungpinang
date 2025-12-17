@@ -1,3 +1,7 @@
+// Helper untuk title case
+function toTitleCase(str) {
+  return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+}
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getNews } from '../services/api';
@@ -147,8 +151,8 @@ const NewsDetailPage = () => {
 
             {/* Content */}
             <div className="p-8">
-              <h1 className="text-4xl font-bold text-gray-800 mb-4 animate-slide-in-left animation-delay-100">
-                {news.title}
+              <h1 className="text-2xl md:text-4xl font-bold text-gray-800 mb-4 animate-slide-in-left animation-delay-100">
+                {toTitleCase(news.title || '')}
               </h1>
 
               {/* Meta Info */}
