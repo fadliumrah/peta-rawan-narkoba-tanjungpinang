@@ -139,7 +139,14 @@ const LogoManager = () => {
                 className="file-input file-input-bordered w-full"
                 required
               />
-              <p className="label-text-alt">Max 2MB (JPG, PNG, SVG recommended)</p>
+              <div className="flex items-center gap-2 mt-1">
+                <p className="label-text-alt">
+                  Max 2MB • Rekomendasi: 400x400px • Format: JPG, PNG, SVG
+                </p>
+                {(formData.image || previewImage) && (
+                  <span className="text-green-500 text-xs font-semibold ml-2">✓ Gambar siap diupload</span>
+                )}
+              </div>
             </div>
 
             <div className="form-control">

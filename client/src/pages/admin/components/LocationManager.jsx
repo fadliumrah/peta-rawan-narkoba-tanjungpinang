@@ -773,7 +773,7 @@ const LocationManager = () => {
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span>💡 Tip: Tekan <kbd className="px-1.5 py-0.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded">Ctrl</kbd> + <strong>Scroll</strong> untuk zoom peta. Atau gunakan dua jari untuk zoom dan geser peta</span>
+          <span>💡 Tip: Tekan <kbd className="px-1.5 py-0.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded">Ctrl</kbd> + <strong>Scroll</strong> untuk zoom peta | Atau gunakan dua jari untuk zoom dan geser peta</span>
         </div>
       </div>
 
