@@ -61,11 +61,12 @@ const NotificationsManager = () => {
             <div className="flex items-center gap-2">
               <button onClick={() => setShowConfirm(true)} className="btn btn-sm btn-error text-white flex items-center gap-2" title="Tandai semua notifikasi sebagai dibaca untuk akun Anda">
                 <AlertTriangle size={14} />
-                <span className="hidden sm:inline">Tandai semua</span>
+                <span className="hidden sm:inline">Semua</span>
                 <span className="sm:hidden">Tandai semua</span>
               </button>
               <button onClick={fetchNotifications} className="btn btn-sm btn-outline">Refresh</button>
             </div>
+            <p className="text-xs text-gray-500 mt-1 sm:mt-0">Akan menandai semua notifikasi sebagai dibaca untuk akun Anda.</p>
           </div>
         </div>
 
