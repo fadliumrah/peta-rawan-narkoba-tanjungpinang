@@ -50,6 +50,16 @@ const locationSchema = new mongoose.Schema({
   color: {
     type: String,
     default: '#FF5733'
+  },
+  // Metadata: who created the location
+  createdBy: {
+    type: String,
+    ref: 'User',
+    default: null
+  },
+  createdByName: {
+    type: String,
+    default: ''
   }
 }, {
   timestamps: true
@@ -57,6 +67,6 @@ const locationSchema = new mongoose.Schema({
 
 // Index untuk query yang lebih cepat
 locationSchema.index({ kelurahan: 1 });
-// Index kecamatan dihapus
+locationSchema.index({ createdBy: 1 });
 
 export default mongoose.model('Location', locationSchema);

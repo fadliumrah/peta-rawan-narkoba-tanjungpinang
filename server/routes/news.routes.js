@@ -220,6 +220,23 @@ router.post('/', authenticateToken, (req, res) => {
       // Populate setelah save untuk mendapatkan nama user
       await news.populate('createdBy', 'nama');
 
+      // Create notification for new news (non-blocking)
+      try {
+        const Notification = (await import('../models/Notification.js')).default;
+        const msg = `Berita baru: ${news.title}`;
+        await Notification.create({
+          type: 'news',
+          message: msg,
+          payload: { newsId: news._id, title: news.title, isPublished: news.isPublished },
+          isRead: false,
+          readBy: [],
+          createdBy: req.user?.nomorKtp || req.user?.id || null,
+          createdByName: req.user?.nama || ''
+        });
+      } catch (notifErr) {
+        console.error('Failed to create notification for new news:', notifErr && notifErr.message ? notifErr.message : notifErr);
+      }
+
       res.status(201).json({ 
         success: true, 
         message: 'News created successfully',

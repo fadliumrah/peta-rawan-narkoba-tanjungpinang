@@ -93,10 +93,30 @@ router.post('/', authenticateToken, async (req, res) => {
       address: address || '',
       description: description || '',
       cases: cases || 1,
-      color: color || '#FF5733'
+      color: color || '#FF5733',
+      // Attach creator info from authenticated token
+      createdBy: req.user?.nomorKtp || req.user?.id || null,
+      createdByName: req.user?.nama || ''
     });
 
     await location.save();
+
+    // Create notification for new location (non-blocking)
+    try {
+      const Notification = (await import('../models/Notification.js')).default;
+      const msg = `Lokasi baru: ${location.kelurahan} (${location.latitude.toFixed(6)}, ${location.longitude.toFixed(6)})`;
+      await Notification.create({
+        type: 'location',
+        message: msg,
+        payload: { locationId: location._id, kelurahan: location.kelurahan, latitude: location.latitude, longitude: location.longitude },
+        isRead: false,
+        readBy: [],
+        createdBy: req.user?.nomorKtp || req.user?.id || null,
+        createdByName: req.user?.nama || ''
+      });
+    } catch (notifErr) {
+      console.error('Failed to create notification for new location:', notifErr && notifErr.message ? notifErr.message : notifErr);
+    }
 
     res.status(201).json({ 
       success: true, 

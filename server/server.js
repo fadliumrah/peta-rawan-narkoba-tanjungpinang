@@ -18,6 +18,7 @@ import logoRoutes from './routes/logo.routes.js';
 import locationRoutes from './routes/location.routes.js';
 import newsRoutes from './routes/news.routes.js';
 import authRoutes from './routes/auth.routes.js';
+import notificationRoutes from './routes/notification.routes.js';
 
 dotenv.config();
 
@@ -249,6 +250,7 @@ app.use('/api/banner', bannerRoutes);
 app.use('/api/logo', logoRoutes);
 app.use('/api/locations', locationRoutes);
 app.use('/api/news', newsRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Serve client production build if available (allows hosting server+client on same host)
 const clientBuildPath = path.join(__dirname, '..', 'client', 'dist');

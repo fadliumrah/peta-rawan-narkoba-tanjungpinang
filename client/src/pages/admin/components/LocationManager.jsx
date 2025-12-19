@@ -19,6 +19,7 @@ import {
 import Toast from '../../../components/Toast';
 import ConfirmModal from '../../../components/ConfirmModal';
 import { useToast } from '../../../hooks/useToast';
+import { getRelativeTime } from '../../../utils/dateFormatter';
 
 // Fix Leaflet icons
 delete L.Icon.Default.prototype._getIconUrl;
@@ -194,6 +195,7 @@ const LocationManager = () => {
   const [mapRef, setMapRef] = useState(null);
   const mapContainerRef = useState(null)[0];
   const [filterKelurahan, setFilterKelurahan] = useState(''); // '' = semua, 'nama_kelurahan' = filter
+  const [searchCoords, setSearchCoords] = useState(''); // cari berdasarkan lat atau lng atau pasangan "lat,lng"
   const [formData, setFormData] = useState({
     latitude: '',
     longitude: '',
@@ -209,10 +211,35 @@ const LocationManager = () => {
   // Get unique kelurahan list untuk dropdown filter
   const uniqueKelurahan = [...new Set(locations.map(loc => loc.kelurahan))].sort();
 
-  // Filter locations berdasarkan kelurahan yang dipilih
-  const filteredLocations = filterKelurahan === '' 
-    ? locations 
-    : locations.filter(loc => loc.kelurahan === filterKelurahan);
+  // Filter locations berdasarkan kelurahan dan/atau pencarian koordinat (client-side, for small lists)
+  const filteredLocations = locations.filter((loc) => {
+    // kelurahan filter
+    if (filterKelurahan && loc.kelurahan !== filterKelurahan) return false;
+
+    // if there's a coordinate search, try to match partial lat or lng or 'lat,lng' pairs
+    if (searchCoords && searchCoords.trim() !== '') {
+      const q = searchCoords.trim().toLowerCase();
+
+      const latStr = loc.latitude.toFixed(6).toLowerCase();
+      const lngStr = loc.longitude.toFixed(6).toLowerCase();
+      const coordStr = `${latStr}, ${lngStr}`;
+
+      if (coordStr.includes(q) || latStr.includes(q) || lngStr.includes(q)) return true;
+
+      // if q contains comma, allow fuzzy pair matching (e.g., "0.9136,104.4565")
+      if (q.includes(',')) {
+        const parts = q.split(',').map(p => p.trim()).filter(Boolean);
+        if (parts.length === 2) {
+          const [pLat, pLng] = parts;
+          if ((pLat && latStr.includes(pLat)) && (pLng && lngStr.includes(pLng))) return true;
+        }
+      }
+
+      return false; // did not match coordinate query
+    }
+
+    return true; // passed filters
+  });
 
   const scrollToMap = () => {
     const mapElement = document.getElementById('admin-map-container');
@@ -743,6 +770,10 @@ const LocationManager = () => {
                 <Popup>
                   <div className="p-2">
                     <h4 className="font-bold">{loc.kelurahan}</h4>
+                    {/* Creator info */}
+                    {loc.createdByName && (
+                      <p className="text-xs text-gray-500 mt-1">Ditambahkan oleh <strong>{loc.createdByName}</strong> • {getRelativeTime(loc.createdAt)}</p>
+                    )}
                     {/* Kecamatan dihapus */}
                     {loc.description && (
                       <p className="text-xs text-gray-600 mt-1">{loc.description}</p>
@@ -792,32 +823,57 @@ const LocationManager = () => {
               </label>
 
               <div className="flex items-center gap-2 ml-auto sm:ml-0 w-full sm:w-auto">
-                <select 
-                  id="filterKelurahan"
-                  name="filterKelurahan"
-                  value={filterKelurahan}
-                  onChange={(e) => setFilterKelurahan(e.target.value)}
-                  className="select select-bordered select-sm w-full sm:w-auto min-w-[180px] pr-8 rounded-full px-3 bg-white"
-                  aria-label="Filter Kelurahan"
-                >
-                  <option value="">🌍 Tampilkan Semua ({locations.length} Lokasi)</option>
-                  {uniqueKelurahan.map((kelurahan) => (
-                    <option key={kelurahan} value={kelurahan}>
-                      {kelurahan} ({locations.filter(loc => loc.kelurahan === kelurahan).length})
-                    </option>
-                  ))}
-                </select>
-
-                {filterKelurahan && (
-                  <button
-                    onClick={() => setFilterKelurahan('')}
-                    className="btn btn-sm btn-ghost text-blue-600 hover:text-blue-800 p-2"
-                    title="Reset Filter"
-                    aria-label="Reset filter"
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <select 
+                    id="filterKelurahan"
+                    name="filterKelurahan"
+                    value={filterKelurahan}
+                    onChange={(e) => setFilterKelurahan(e.target.value)}
+                    className="select select-bordered select-sm w-full sm:w-auto min-w-[180px] pr-8 rounded-full px-3 bg-white"
+                    aria-label="Filter Kelurahan"
                   >
-                    <X size={16} />
-                  </button>
-                )}
+                    <option value="">🌍 Tampilkan Semua ({locations.length} Lokasi)</option>
+                    {uniqueKelurahan.map((kelurahan) => (
+                      <option key={kelurahan} value={kelurahan}>
+                        {kelurahan} ({locations.filter(loc => loc.kelurahan === kelurahan).length})
+                      </option>
+                    ))}
+                  </select>
+
+                  {filterKelurahan && (
+                    <button
+                      onClick={() => setFilterKelurahan('')}
+                      className="btn btn-sm btn-ghost text-blue-600 hover:text-blue-800 p-2"
+                      title="Reset Filter"
+                      aria-label="Reset filter"
+                    >
+                      <X size={16} />
+                    </button>
+                  )}
+                </div>
+
+                {/* Search by coordinates */}
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <input
+                    id="searchCoords"
+                    type="text"
+                    value={searchCoords}
+                    onChange={(e) => setSearchCoords(e.target.value)}
+                    placeholder="Cari koordinat (lat atau lng, mis. '0.9136' atau '0.9136,104.4565')"
+                    className="input input-sm input-bordered w-full sm:min-w-[220px] rounded-full"
+                    aria-label="Cari koordinat"
+                  />
+                  {searchCoords && (
+                    <button
+                      onClick={() => setSearchCoords('')}
+                      className="btn btn-sm btn-ghost text-blue-600 hover:text-blue-800 p-2"
+                      title="Reset Pencarian Koordinat"
+                      aria-label="Reset pencarian koordinat"
+                    >
+                      <X size={16} />
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -849,14 +905,26 @@ const LocationManager = () => {
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      <p className="font-semibold">Tidak ada data lokasi{filterKelurahan && ` untuk kelurahan ${filterKelurahan}`}</p>
-                      {filterKelurahan && (
-                        <button 
-                          onClick={() => setFilterKelurahan('')}
-                          className="btn btn-sm btn-primary mt-2 rounded-full px-4"
-                        >
-                          Tampilkan Semua Lokasi
-                        </button>
+                      <p className="font-semibold">Tidak ada data lokasi{filterKelurahan && ` untuk kelurahan ${filterKelurahan}`}{searchCoords && ` untuk pencarian koordinat "${searchCoords}"`}</p>
+                      {(filterKelurahan || searchCoords) && (
+                        <div className="flex gap-2 mt-2">
+                          {filterKelurahan && (
+                            <button 
+                              onClick={() => setFilterKelurahan('')}
+                              className="btn btn-sm btn-primary rounded-full px-4"
+                            >
+                              Tampilkan Semua Lokasi
+                            </button>
+                          )}
+                          {searchCoords && (
+                            <button
+                              onClick={() => setSearchCoords('')}
+                              className="btn btn-sm btn-outline rounded-full px-4"
+                            >
+                              Reset Pencarian
+                            </button>
+                          )}
+                        </div>
                       )}
                     </div>
                   </td>
@@ -865,12 +933,17 @@ const LocationManager = () => {
                 filteredLocations.map((loc) => (
                   <tr key={loc._id}>
                     <td>
-                      <div className="flex items-center space-x-2">
-                        <div
-                          className="w-4 h-4 rounded-full"
-                          style={{ backgroundColor: loc.color }}
-                        ></div>
-                        <span className="font-medium">{loc.kelurahan}</span>
+                      <div className="flex flex-col">
+                        <div className="flex items-center space-x-2">
+                          <div
+                            className="w-4 h-4 rounded-full"
+                            style={{ backgroundColor: loc.color }}
+                          ></div>
+                          <span className="font-medium">{loc.kelurahan}</span>
+                        </div>
+                        {loc.createdByName && (
+                          <div className="text-xs text-gray-500 mt-1">Oleh: {loc.createdByName} • {getRelativeTime(loc.createdAt)}</div>
+                        )}
                       </div>
                     </td>
                     {/* <td>{loc.kecamatan}</td> */}

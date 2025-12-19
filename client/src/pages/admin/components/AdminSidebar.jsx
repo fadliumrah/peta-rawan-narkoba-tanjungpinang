@@ -1,4 +1,5 @@
 import React from 'react';
+import { Bell } from 'lucide-react';
 // no direct icon imports here; icons are provided by the tabs
 
 const AdminSidebar = ({ tabs, activeTab, setActiveTab, sidebarOpen, setSidebarOpen, headerHeight }) => {
@@ -26,7 +27,8 @@ const AdminSidebar = ({ tabs, activeTab, setActiveTab, sidebarOpen, setSidebarOp
 
       <nav role="navigation" aria-label="Admin menu" className="p-4 space-y-2 overflow-y-auto h-full">
         {tabs.map((tab) => {
-          const Icon = tab.icon;
+          // Use Bell icon for notifications tab for consistent UX
+          const Icon = tab.id === 'notifications' ? Bell : tab.icon;
           return (
             <button
               key={tab.id}
@@ -43,8 +45,13 @@ const AdminSidebar = ({ tabs, activeTab, setActiveTab, sidebarOpen, setSidebarOp
                 }
               `}
             >
-              <Icon size={20} />
+              <Icon size={20} className={`${activeTab === tab.id ? 'text-white' : 'text-gray-600'}`} />
               <span className="font-medium">{tab.label}</span>
+              {tab.unreadCount > 0 && (
+                <span className="ml-auto inline-flex items-center justify-center px-2 py-0.5 text-xs font-medium rounded-full bg-red-600 text-white">
+                  {tab.unreadCount > 99 ? '99+' : tab.unreadCount}
+                </span>
+              )}
             </button>
           );
         })}

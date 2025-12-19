@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logout, getUserInfo } from '../../utils/auth';
+import { getUnreadNotificationCount } from '../../services/api';
+
+// Note: Header bell removed, unread count still polled for sidebar badge.
 import { 
   LogOut, 
   Image as ImageIcon, 
@@ -12,11 +15,14 @@ import {
   AlertTriangle
 } from 'lucide-react';
 
+
+
 // Import tab components
 import BannerManager from './components/BannerManager';
 import LogoManager from './components/LogoManager';
 import LocationManager from './components/LocationManager';
 import NewsManager from './components/NewsManager';
+import NotificationsManager from './components/NotificationsManager';
 import AdminManager from './components/AdminManager';
 import AdminSidebar from './components/AdminSidebar';
 
@@ -69,15 +75,37 @@ const AdminDashboard = () => {
     setShowLogoutModal(false);
   };
 
+  const [unreadCount, setUnreadCount] = useState(0);
+
   const tabs = [
     { id: 'banner', label: 'Banner', icon: ImageIcon, component: BannerManager },
     { id: 'logo', label: 'Logo BNN', icon: ImageIcon, component: LogoManager },
     { id: 'locations', label: 'Titik Lokasi', icon: MapPin, component: LocationManager },
     { id: 'news', label: 'Kelola Berita', icon: Newspaper, component: NewsManager },
+    { id: 'notifications', label: 'Notifikasi', icon: AlertTriangle, component: NotificationsManager },
     { id: 'admins', label: 'Kelola Admin', icon: Users, component: AdminManager },
   ];
 
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component;
+
+  // Poll unread count for sidebar badge
+  const fetchUnreadCount = async () => {
+    try {
+      const res = await getUnreadNotificationCount();
+      if (res.data && res.data.success) setUnreadCount(res.data.data.count || 0);
+    } catch (err) {
+      console.error('Failed to fetch unread count', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUnreadCount();
+    const ms = parseInt(import.meta.env.VITE_NOTIF_POLL_MS || '30000', 10);
+    const t = setInterval(fetchUnreadCount, ms);
+    const handler = () => fetchUnreadCount();
+    window.addEventListener('notifications-updated', handler);
+    return () => { clearInterval(t); window.removeEventListener('notifications-updated', handler); };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex flex-col">
@@ -127,7 +155,7 @@ const AdminDashboard = () => {
       <div className="flex flex-1">
         {/* Sidebar (moved to component) */}
         <AdminSidebar
-          tabs={tabs}
+          tabs={tabs.map(t => t.id === 'notifications' ? { ...t, unreadCount } : t)}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           sidebarOpen={sidebarOpen}

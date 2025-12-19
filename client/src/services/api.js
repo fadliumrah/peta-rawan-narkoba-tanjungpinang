@@ -77,4 +77,16 @@ export const updateNews = (id, formData) => api.put(`/news/${id}`, formData, {
 });
 export const deleteNews = (id) => api.delete(`/news/${id}`);
 
+// Notifications (admin-only)
+export const getNotifications = (unreadOnly = false, limit = 100) => {
+  const params = [];
+  if (unreadOnly) params.push('unread=true');
+  if (limit) params.push(`limit=${encodeURIComponent(limit)}`);
+  const qs = params.length ? `?${params.join('&')}` : '';
+  return api.get(`/notifications${qs}`);
+};
+export const getUnreadNotificationCount = () => api.get('/notifications/count');
+export const markNotificationRead = (id) => api.patch(`/notifications/${id}/read`);
+export const markAllNotificationsRead = () => api.patch('/notifications/read-all');
+
 export default api;
