@@ -76,13 +76,36 @@ if (process.env.ALLOWED_ORIGINS) {
 app.use(cors(corsOptions));
 
 // Basic rate limiting for API
+// Allow overriding via RATE_LIMIT_MAX and RATE_LIMIT_WINDOW_MS
 const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || String(15 * 60 * 1000), 10), // default 15 minutes
+  max: parseInt(process.env.RATE_LIMIT_MAX || '100', 10), // default 100 requests per window
+  standardHeaders: true,
+  legacyHeaders: false,
+  // Skip notification endpoints so they can have a dedicated, more permissive limiter
+  skip: (req) => {
+    try {
+      return req.originalUrl && req.originalUrl.startsWith('/api/notifications');
+    } catch (e) {
+      return false;
+    }
+  }
+});
+app.use('/api/', apiLimiter);
+
+// Dedicated rate limiter for notifications to reduce accidental 429s when clients poll frequently.
+// Configure with NOTIF_RATE_LIMIT_MAX and NOTIF_RATE_LIMIT_WINDOW_MS
+const notifWindowMs = parseInt(process.env.NOTIF_RATE_LIMIT_WINDOW_MS || String(5 * 60 * 1000), 10); // default 5 minutes
+const notifMax = parseInt(process.env.NOTIF_RATE_LIMIT_MAX || '60', 10); // default 60 requests per window
+const notificationsLimiter = rateLimit({
+  windowMs: notifWindowMs,
+  max: notifMax,
   standardHeaders: true,
   legacyHeaders: false
 });
-app.use('/api/', apiLimiter);
+app.use('/api/notifications', notificationsLimiter);
+console.log('🔒 API rate limiting: global max=', apiLimiter.options ? apiLimiter.options.max : 'n/a', 'windowMs=', apiLimiter.options ? apiLimiter.options.windowMs : 'n/a');
+console.log('🔓 Notifications rate limiting: max=', notifMax, 'windowMs=', notifWindowMs);
 
 // Temporary request-logging middleware for API troubleshooting
 // Enable by setting `LOG_REQUESTS=1` in environment (works in production when set)
