@@ -175,8 +175,8 @@ const NewsList = ({ limit = 6 }) => {
                     className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                   />
                 </div>
-                <div className="p-5 flex flex-col flex-1">
-                  <h3 className="font-bold text-2xl md:text-base mb-2 line-clamp-3 hover:text-primary transition-colors leading-snug min-h-[3.5rem]">
+                <div className="p-5 flex flex-col flex-1 min-w-0">
+                  <h3 className="font-bold text-base md:text-xl mb-2 line-clamp-3 hover:text-primary transition-colors leading-snug min-h-[3.5rem]">
                     {toTitleCase(item.title || '')}
                   </h3>
                   <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed flex-1">

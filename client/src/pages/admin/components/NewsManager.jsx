@@ -321,7 +321,7 @@ const NewsManager = () => {
       <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-xl p-4 md:p-6 text-white">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="flex-1">
-            <h2 className="text-2xl md:text-3xl font-bold mb-2">Kelola Berita</h2>
+            <h2 className="text-lg md:text-3xl font-bold mb-2">Kelola Berita</h2>
             <div className="flex flex-wrap gap-3 text-sm">
               <p className="text-blue-100">📊 Total: {newsList.length} berita</p>
               <p className="text-green-200">✓ Published: {publishedCount}</p>
@@ -476,9 +476,9 @@ const NewsManager = () => {
                     style={{ aspectRatio: '16/9' }}
                   />
                 </div>
-                <div className="flex-1 p-4 md:p-6">
+                <div className="flex-1 p-4 md:p-6 min-w-0">
                   <div className="mb-2 flex flex-col gap-2">
-                    <h3 className="font-bold text-2xl md:text-base mb-2 break-words whitespace-pre-line text-gray-800">
+                    <h3 className="font-bold text-base md:text-xl mb-2 break-words whitespace-pre-line text-gray-800 leading-tight line-clamp-2 md:line-clamp-3">
                       {toTitleCase(news.title)}
                     </h3>
                     <div className="flex flex-row flex-wrap gap-2 mt-1">

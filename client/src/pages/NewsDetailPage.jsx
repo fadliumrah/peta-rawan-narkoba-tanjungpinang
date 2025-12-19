@@ -151,7 +151,7 @@ const NewsDetailPage = () => {
 
             {/* Content */}
             <div className="p-8">
-              <h1 className="text-2xl md:text-4xl font-bold text-gray-800 mb-4 animate-slide-in-left animation-delay-100">
+              <h1 className="text-lg md:text-4xl font-bold text-gray-800 mb-4 animate-slide-in-left animation-delay-100">
                 {toTitleCase(news.title || '')}
               </h1>
 
