@@ -66,7 +66,7 @@ const NotificationsManager = () => {
               </button>
               <button onClick={fetchNotifications} className="btn btn-sm btn-outline">Refresh</button>
             </div>
-            <p className="text-xs text-gray-500 mt-1 sm:mt-0">Akan menandai semua notifikasi sebagai dibaca untuk akun Anda.</p>
+
           </div>
         </div>
 
