@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getNotifications, markNotificationRead, markAllNotificationsRead } from '../../../services/api';
 import Toast from '../../../components/Toast';
 import { useToast } from '../../../hooks/useToast';
-import { Check, X, AlertTriangle } from 'lucide-react';
+import { Check, X, AlertTriangle, MapPin, Newspaper } from 'lucide-react';
 
 const NotificationsManager = () => {
   const [notifications, setNotifications] = useState([]);
@@ -120,23 +120,38 @@ const NotificationsManager = () => {
               <div key={n._id} className={`p-4 ${n.isRead ? '' : 'bg-blue-50'}`}>
                 <div className="flex items-start gap-3">
                   <div className="flex-1">
-                    <div className="font-medium text-sm">{n.message}</div>
-                    <div className="text-xs text-gray-600 mt-1">{n.createdByName ? `Oleh ${n.createdByName}` : ''}{n.createdAt && ` • ${new Date(n.createdAt).toLocaleString()}`}</div>
+                    {n.type === 'location' ? (
+                      <>
+                        <div className="font-medium text-sm">Lokasi ditambahkan oleh : {n.createdByName ? n.createdByName : ''}{n.createdAt && ` • ${new Date(n.createdAt).toLocaleString()}`}:</div>
+                        <div className="mt-2 text-sm text-gray-700 flex items-center gap-2"><MapPin size={14} className="text-gray-600" /><span>Kelurahan {n.payload && n.payload.kelurahan ? n.payload.kelurahan : (n.message || '')} {n.payload && n.payload.latitude && n.payload.longitude ? `(${Number(n.payload.latitude).toFixed(6)}, ${Number(n.payload.longitude).toFixed(6)})` : ''}</span></div>
+                      </>
+                    ) : n.type === 'news' ? (
+                      <>
+                        <div className="font-medium text-sm">Berita ditambahkan oleh : {n.createdByName ? n.createdByName : ''}{n.createdAt && ` • ${new Date(n.createdAt).toLocaleString()}`}:</div>
+                        <div className="mt-2 text-sm text-gray-700 flex items-center gap-2"><Newspaper size={14} className="text-gray-600" /><span>{n.payload && n.payload.title ? n.payload.title : (n.message || (n.payload && n.payload.newsId ? `ID: ${n.payload.newsId}` : ''))}</span></div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="font-medium text-sm">{n.message}</div>
+                        <div className="text-xs text-gray-600 mt-1">{n.createdByName ? `Oleh ${n.createdByName}` : ''}{n.createdAt && ` • ${new Date(n.createdAt).toLocaleString()}`}</div>
 
-                    {n.payload && (n.payload.locations || n.payload.locationId || n.payload.newsId) && (
-                      <ul className="mt-2 list-disc list-inside text-sm text-gray-700">
-                        {Array.isArray(n.payload.locations) && n.payload.locations.length > 0 ? (
-                          n.payload.locations.map((item, idx) => (
-                            <li key={idx}>{item.kelurahan ? `${item.kelurahan} — ` : ''}{item.latitude && item.longitude ? `${Number(item.latitude).toFixed(6)}, ${Number(item.longitude).toFixed(6)}` : JSON.stringify(item)}</li>
-                          ))
-                        ) : n.payload.locationId ? (
-                          <li>{n.payload.kelurahan ? `${n.payload.kelurahan} — ` : ''}{n.payload.latitude && n.payload.longitude ? `${Number(n.payload.latitude).toFixed(6)}, ${Number(n.payload.longitude).toFixed(6)}` : `ID: ${n.payload.locationId}`}</li>
-                        ) : n.payload.newsId ? (
-                          <li>{n.payload.title ? n.payload.title : `ID: ${n.payload.newsId}`}</li>
-                        ) : (
-                          <li>{JSON.stringify(n.payload)}</li>
+                        {/* For location notifications the message already contains kelurahan and coordinates, so avoid duplicating payload info */}
+                        {n.payload && n.type !== 'location' && (n.payload.locations || n.payload.locationId || n.payload.newsId) && (
+                          <ul className="mt-2 list-disc list-inside text-sm text-gray-700">
+                            {Array.isArray(n.payload.locations) && n.payload.locations.length > 0 ? (
+                              n.payload.locations.map((item, idx) => (
+                                <li key={idx}>{item.kelurahan ? `${item.kelurahan} — ` : ''}{item.latitude && item.longitude ? `${Number(item.latitude).toFixed(6)}, ${Number(item.longitude).toFixed(6)}` : JSON.stringify(item)}</li>
+                              ))
+                            ) : n.payload.locationId ? (
+                              <li>{n.payload.kelurahan ? `${n.payload.kelurahan} — ` : ''}{n.payload.latitude && n.payload.longitude ? `${Number(n.payload.latitude).toFixed(6)}, ${Number(n.payload.longitude).toFixed(6)}` : `ID: ${n.payload.locationId}`}</li>
+                            ) : n.payload.newsId ? (
+                              <li>{n.payload.title ? n.payload.title : `ID: ${n.payload.newsId}`}</li>
+                            ) : (
+                              <li>{JSON.stringify(n.payload)}</li>
+                            )}
+                          </ul>
                         )}
-                      </ul>
+                      </>
                     )}
 
                   </div>
