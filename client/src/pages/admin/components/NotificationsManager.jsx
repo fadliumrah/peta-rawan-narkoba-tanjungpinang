@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { getNotifications, markNotificationRead, markAllNotificationsRead } from '../../../services/api';
 import Toast from '../../../components/Toast';
 import { useToast } from '../../../hooks/useToast';
-import { Check } from 'lucide-react';
+import { Check, X, AlertTriangle } from 'lucide-react';
 
 const NotificationsManager = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showConfirm, setShowConfirm] = useState(false);
   const { info, success, error } = useToast();
 
   const fetchNotifications = async () => {
@@ -56,11 +57,55 @@ const NotificationsManager = () => {
       <div className="bg-white p-4 rounded-lg shadow">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold">Notifikasi</h3>
-          <div className="flex items-center gap-2">
-            <button onClick={handleMarkAll} className="btn btn-sm btn-ghost">Tandai semua dibaca</button>
-            <button onClick={fetchNotifications} className="btn btn-sm btn-outline">Refresh</button>
+          <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2">
+            <div className="flex items-center gap-2">
+              <button onClick={() => setShowConfirm(true)} className="btn btn-sm btn-error text-white flex items-center gap-2" title="Tandai semua notifikasi sebagai dibaca untuk akun Anda">
+                <AlertTriangle size={14} />
+                <span className="hidden sm:inline">Tandai semua</span>
+                <span className="sm:hidden">Tandai semua</span>
+              </button>
+              <button onClick={fetchNotifications} className="btn btn-sm btn-outline">Refresh</button>
+            </div>
           </div>
         </div>
+
+        {showConfirm && (
+          <div className="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full animate-in zoom-in duration-200">
+              <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-4 rounded-t-2xl">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                    <AlertTriangle size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold">Konfirmasi: Tandai Semua Dibaca</h3>
+                    <p className="text-sm opacity-90">Aksi ini akan menandai semua notifikasi sebagai sudah dibaca untuk akun Anda.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="px-6 py-6">
+                <p className="text-sm text-gray-700">Lanjutkan menandai semua notifikasi sebagai dibaca?</p>
+              </div>
+
+              <div className="px-6 pb-6 flex space-x-3">
+                <button
+                  onClick={() => setShowConfirm(false)}
+                  className="flex-1 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={async () => { await handleMarkAll(); setShowConfirm(false); }}
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-xl flex items-center justify-center gap-2"
+                >
+                  <Check size={16} />
+                  <span>Ya, Tandai Semua</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
