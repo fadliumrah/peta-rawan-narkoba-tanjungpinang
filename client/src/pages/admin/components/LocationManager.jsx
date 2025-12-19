@@ -684,7 +684,7 @@ const LocationManager = () => {
           {/* Panel Konfirmasi Lokasi - Compact & Efisien */}
           {showConfirm && tempMarker && (
             // Position the confirmation panel under the Leaflet zoom control on the left
-            <div className="absolute left-3 top-40 z-[1000] w-[240px] bg-white/98 backdrop-blur-sm border-2 border-gray-200 sm:border-green-500 rounded-lg shadow-2xl">
+            <div className="absolute left-3 top-20 z-[1000] w-[240px] bg-white/98 backdrop-blur-sm border-2 border-gray-200 sm:border-green-500 rounded-lg shadow-2xl">
               <div className="p-2">
                 <div className="flex items-center gap-1 mb-1.5">
                   <MapPin className="text-gray-600 sm:text-green-600" size={12} />
