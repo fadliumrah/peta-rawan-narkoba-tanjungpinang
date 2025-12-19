@@ -29,7 +29,17 @@ import AdminSidebar from './components/AdminSidebar';
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const user = getUserInfo();
-  const [activeTab, setActiveTab] = useState('banner');
+  const [activeTab, setActiveTabState] = useState(() => {
+    try {
+      return localStorage.getItem('adminActiveTab') || 'banner';
+    } catch (e) {
+      return 'banner';
+    }
+  });
+  const setActiveTab = (id) => {
+    setActiveTabState(id);
+    try { localStorage.setItem('adminActiveTab', id); } catch (e) {}
+  };
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const headerRef = useRef(null);
@@ -68,6 +78,7 @@ const AdminDashboard = () => {
 
   const confirmLogout = () => {
     logout();
+    try { localStorage.removeItem('adminActiveTab'); } catch (e) {}
     navigate('/admin/login');
   };
 
